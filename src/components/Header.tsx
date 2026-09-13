@@ -1,4 +1,4 @@
-import { BarChart3, BookOpen, Settings2, Wallet } from 'lucide-react';
+import { BarChart3, BookOpen, Settings2, UserRound, Wallet } from 'lucide-react';
 import { UserProfile } from '../types';
 
 interface HeaderProps {
@@ -37,7 +37,13 @@ export default function Header({ user, activeTab, setActiveTab, onOpenProfile, o
 
         <button onClick={onOpenProfile} className="group flex items-center gap-2.5 text-left">
           <span className="hidden sm:block"><b className="block max-w-32 truncate text-xs font-medium text-stone-200">{user.displayName}</b><small className="block max-w-32 truncate font-mono text-[8px] uppercase tracking-[.12em] text-stone-500">Private workspace</small></span>
-          {user.photoURL ? <img src={user.photoURL} alt={user.displayName} className="h-9 w-9 rounded-full border border-white/15 object-cover grayscale-[20%] transition group-hover:border-[#c7a76a]/60 group-hover:grayscale-0" /> : <span className="grid h-9 w-9 place-items-center rounded-full border border-[#c7a76a]/30 font-display text-lg text-[#d9bc82]">{user.displayName.slice(0, 1).toUpperCase()}</span>}
+          {user.photoURL ? (
+            <img src={user.photoURL} alt={user.displayName} className="h-9 w-9 rounded-full border border-white/15 object-cover grayscale-[20%] transition group-hover:border-[#c7a76a]/60 group-hover:grayscale-0" />
+          ) : (
+            <span className="grid h-9 w-9 place-items-center rounded-full border border-stone-300 bg-stone-100 text-stone-700 transition group-hover:border-white group-hover:bg-white" aria-label="ยังไม่ได้ตั้งรูปโปรไฟล์">
+              <UserRound className="h-5 w-5 fill-stone-700 stroke-stone-700" />
+            </span>
+          )}
           <Settings2 className="h-3.5 w-3.5 text-stone-600 transition group-hover:text-[#c7a76a]" />
         </button>
       </div>

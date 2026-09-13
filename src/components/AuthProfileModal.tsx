@@ -121,8 +121,8 @@ export default function AuthProfileModal({
         <div className="grid gap-0 md:grid-cols-[1.25fr_.75fr]">
           <form onSubmit={saveProfile} className="space-y-5 p-5 sm:p-7">
             <div className="flex items-center gap-4">
-              <button type="button" onClick={() => avatarInput.current?.click()} className="group relative h-24 w-24 shrink-0 overflow-hidden border border-[#c7a76a]/40 bg-[#0d0d0b]">
-                {avatar ? <img src={avatar} alt="รูปโปรไฟล์" className="h-full w-full object-cover" /> : <UserRound className="m-auto h-full w-9 text-amber-300" />}
+              <button type="button" onClick={() => avatarInput.current?.click()} className="group relative grid h-24 w-24 shrink-0 place-items-center overflow-hidden rounded-full border border-stone-300 bg-stone-100 text-stone-700 transition hover:border-white hover:bg-white">
+                {avatar ? <img src={avatar} alt="รูปโปรไฟล์" className="h-full w-full object-cover" /> : <UserRound className="h-11 w-11 fill-stone-700 stroke-stone-700" />}
                 <span className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1 bg-black/70 py-1.5 text-[10px] text-white opacity-0 transition group-hover:opacity-100"><ImagePlus className="h-3 w-3" /> เปลี่ยนรูป</span>
               </button>
               <div>
