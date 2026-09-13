@@ -12,6 +12,8 @@
 - Improved calendar density and mobile sizing while preserving one-tap entry creation
 - Unified journal, analytics, profile, trade, and capital-ledger surfaces
 - Added reduced-motion support and more deliberate focus states
+- Replaced Profit Factor with achieved reward-to-risk based on average realized wins and losses
+- Consolidated the six headline metrics into a quieter editorial statistics rail
 
 ## 3.0.0-foundation — 2026-09-13
 

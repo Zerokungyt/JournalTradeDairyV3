@@ -1,15 +1,12 @@
 import React, { useState, useMemo } from 'react';
 import {
   TrendingUp,
-  Percent,
   Wallet,
-  Activity,
   Award,
   Heart,
   Save,
   Check,
   ChevronRight,
-  TrendingDown,
   Coins,
   ShieldCheck,
 } from 'lucide-react';
@@ -67,7 +64,7 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
         winRate: 0,
         avgWin: 0,
         avgLoss: 0,
-        profitFactor: 0,
+        realizedRRR: 0,
         totalPnL: 0,
         currentBalance,
         avgRRR: 0,
@@ -89,7 +86,9 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
     const avgWin = winsCount > 0 ? totalWinSum / winsCount : 0;
     const avgLoss = lossesCount > 0 ? totalLossSum / lossesCount : 0;
 
-    const profitFactor = totalLossSum > 0 ? totalWinSum / totalLossSum : totalWinSum > 0 ? 999 : 0;
+    // Realized reward-to-risk (payoff ratio): average winning PnL / average losing PnL.
+    // This is intentionally distinct from Profit Factor, which uses aggregate sums.
+    const realizedRRR = avgLoss > 0 ? avgWin / avgLoss : avgWin > 0 ? Number.POSITIVE_INFINITY : 0;
     const totalPnL = trades.reduce((sum, t) => sum + t.profitLoss, 0);
     const expectancy = totalPnL / total;
     let equity = user.startingCapital;
@@ -114,7 +113,7 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
       winRate,
       avgWin,
       avgLoss,
-      profitFactor,
+      realizedRRR,
       totalPnL,
       currentBalance,
       avgRRR,
@@ -434,39 +433,39 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
       </div>
 
       {/* Grid of Quant Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        <div className="bg-[#11110F] p-4 border border-white/10 text-left">
-          <Percent className="h-5 w-5 text-[#c7a76a] mb-4" />
+      <div className="grid grid-cols-2 gap-px overflow-hidden border border-white/10 bg-white/10 md:grid-cols-3 xl:grid-cols-6">
+        <div className="min-h-[126px] bg-[#11110F] p-4 text-left">
+          <span className="font-mono text-[9px] tracking-[.14em] text-[#c7a76a]">01</span>
           <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Win Rate (อัตราการชนะ)</p>
           <p className="text-xl font-bold text-zinc-100 mt-1 font-mono">{stats.winRate.toFixed(1)}%</p>
           <p className="text-[9px] text-zinc-400 mt-1">ชนะ {stats.wins} จาก {stats.total} ครั้ง</p>
         </div>
 
-        <div className="bg-[#11110F] p-4 border border-white/10 text-left">
-          <TrendingUp className="h-5 w-5 text-[#c7a76a] mb-4" />
+        <div className="min-h-[126px] bg-[#11110F] p-4 text-left">
+          <span className="font-mono text-[9px] tracking-[.14em] text-[#c7a76a]">02</span>
           <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">กำไรเฉลี่ยไม้ชนะ</p>
           <p className="text-xl font-bold text-amber-400 mt-1 font-mono">+${stats.avgWin.toFixed(0)}</p>
           <p className="text-[9px] text-zinc-400 mt-1">จำนวนไม้บวกทั้งหมด: {stats.wins}</p>
         </div>
 
-        <div className="bg-[#11110F] p-4 border border-white/10 text-left">
-          <TrendingDown className="h-5 w-5 text-rose-400 mb-4" />
+        <div className="min-h-[126px] bg-[#11110F] p-4 text-left">
+          <span className="font-mono text-[9px] tracking-[.14em] text-[#c7a76a]">03</span>
           <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">ขาดทุนเฉลี่ยไม้แพ้</p>
           <p className="text-xl font-bold text-rose-400 mt-1 font-mono">-${stats.avgLoss.toFixed(0)}</p>
           <p className="text-[9px] text-zinc-400 mt-1">จำนวนไม้ลบทั้งหมด: {stats.losses}</p>
         </div>
 
-        <div className="bg-[#11110F] p-4 border border-white/10 text-left">
-          <Activity className="h-5 w-5 text-[#c7a76a] mb-4" />
-          <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Profit Factor (สัดส่วนกำไร)</p>
+        <div className="min-h-[126px] bg-[#11110F] p-4 text-left">
+          <span className="font-mono text-[9px] tracking-[.14em] text-[#c7a76a]">04</span>
+          <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Achieved Risk–Reward Ratio</p>
           <p className="text-xl font-bold text-amber-400 mt-1 font-mono">
-            {stats.profitFactor === 999 ? '∞' : stats.profitFactor.toFixed(2)}
+            1 : {Number.isFinite(stats.realizedRRR) ? stats.realizedRRR.toFixed(2) : '∞'}
           </p>
-          <p className="text-[9px] text-zinc-400 mt-1">สัดส่วนความเสี่ยงรวมเทียบยอดชนะ</p>
+          <p className="text-[9px] text-zinc-400 mt-1">กำไรเฉลี่ยต่อขาดทุนเฉลี่ย</p>
         </div>
 
-        <div className="bg-[#11110F] p-4 border border-white/10 text-left">
-          <Coins className="h-5 w-5 text-emerald-400 mb-4" />
+        <div className="min-h-[126px] bg-[#11110F] p-4 text-left">
+          <span className="font-mono text-[9px] tracking-[.14em] text-[#c7a76a]">05</span>
           <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Expectancy / Trade</p>
           <p className={`text-xl font-bold mt-1 font-mono ${stats.expectancy >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
             {stats.expectancy >= 0 ? '+' : '-'}${Math.abs(stats.expectancy).toFixed(2)}
@@ -474,8 +473,8 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
           <p className="text-[9px] text-zinc-400 mt-1">ค่าเฉลี่ยผลลัพธ์ต่อหนึ่งรายการ</p>
         </div>
 
-        <div className="bg-[#11110F] p-4 border border-white/10 text-left">
-          <ShieldCheck className="h-5 w-5 text-[#c7a76a] mb-4" />
+        <div className="min-h-[126px] bg-[#11110F] p-4 text-left">
+          <span className="font-mono text-[9px] tracking-[.14em] text-[#c7a76a]">06</span>
           <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Max Drawdown</p>
           <p className="text-xl font-bold text-amber-300 mt-1 font-mono">{stats.maxDrawdown.toFixed(2)}%</p>
           <p className="text-[9px] text-zinc-400 mt-1">การลดลงสูงสุดจากจุดสูงสุด</p>
