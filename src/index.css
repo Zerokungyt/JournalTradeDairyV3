@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Custom glow effect and scrollbar for high-end luxury Elegant Dark design */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080B14;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #172036;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #38BDF8;
+}
+
+.emerald-glow, .cyan-glow {
+  text-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+}
+
+.emerald-border, .cyan-border {
+  border-color: rgba(56, 189, 248, 0.2);
+}
+
+.emerald-border-hover:hover, .cyan-border-hover:hover {
+  border-color: rgba(56, 189, 248, 0.6);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+}
+
+.neon-green-glow, .neon-blue-glow {
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+.neon-red-glow {
+  text-shadow: 0 0 10px rgba(244, 63, 94, 0.4);
+}
+
+.platinum-glow {
+  text-shadow: 0 0 12px rgba(226, 232, 240, 0.25);
+}
+

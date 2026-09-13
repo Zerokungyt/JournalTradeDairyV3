@@ -1,0 +1,6 @@
+{
+  "name": "JournalDairyTrade",
+  "description": "A luxury dark-themed trading journal calendar and quantitative analysis dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
