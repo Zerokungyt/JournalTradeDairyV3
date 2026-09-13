@@ -15,6 +15,7 @@
 - Replaced Profit Factor with achieved reward-to-risk based on average realized wins and losses
 - Consolidated the six headline metrics into a quieter editorial statistics rail
 - Replaced the initial-letter fallback with a neutral social-style profile silhouette
+- Migrated legacy remote stock avatars to the neutral fallback while preserving locally uploaded images
 
 ## 3.0.0-foundation — 2026-09-13
 

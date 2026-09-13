@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from 'react';
-import { Check, Database, Download, ImagePlus, ShieldCheck, Upload, UserRound, X } from 'lucide-react';
+import { Check, Database, Download, ImagePlus, RotateCcw, ShieldCheck, Upload, UserRound, X } from 'lucide-react';
 import { UserProfile } from '../types';
 import { dbService } from '../lib/db';
 
@@ -128,6 +128,11 @@ export default function AuthProfileModal({
               <div>
                 <p className="font-semibold text-zinc-100">ภาพประจำ Journal</p>
                 <p className="mt-1 text-sm leading-relaxed text-zinc-400">อัปโหลดภาพที่ชอบจากเครื่อง ภาพจะอยู่ในเบราว์เซอร์นี้เท่านั้น</p>
+                {avatar && (
+                  <button type="button" onClick={() => { setAvatar(''); setMessage('เลือกใช้รูปเริ่มต้นแล้ว กดบันทึกเพื่อยืนยัน'); }} className="mt-2 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[.08em] text-stone-500 transition hover:text-[#d9bc82]">
+                    <RotateCcw className="h-3 w-3" /> ใช้รูปเริ่มต้น
+                  </button>
+                )}
                 <input ref={avatarInput} type="file" accept="image/*" onChange={(e) => readAvatar(e.target.files?.[0])} className="hidden" />
               </div>
             </div>

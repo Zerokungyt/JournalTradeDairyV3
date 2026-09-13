@@ -39,11 +39,23 @@ function write(key: string, value: unknown) {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
+function sanitizeProfile(profile: UserProfile): UserProfile {
+  const photoURL = typeof profile.photoURL === 'string' && profile.photoURL.startsWith('data:image/')
+    ? profile.photoURL
+    : '';
+  const tradingPlan = profile.tradingPlan?.trim().toLowerCase() === 'alchemist'
+    ? DEFAULT_PROFILE.tradingPlan
+    : profile.tradingPlan;
+  return { ...profile, photoURL, tradingPlan };
+}
+
 function migrateProfile(): UserProfile {
   const v3 = localStorage.getItem(PROFILE_KEY);
   if (v3) {
     try {
-      return { ...DEFAULT_PROFILE, ...JSON.parse(v3), uid: 'local_owner', email: undefined };
+      const profile = sanitizeProfile({ ...DEFAULT_PROFILE, ...JSON.parse(v3), uid: 'local_owner', email: undefined });
+      write(PROFILE_KEY, profile);
+      return profile;
     } catch {
       // Fall through to the legacy migration.
     }
@@ -52,9 +64,9 @@ function migrateProfile(): UserProfile {
   const legacyUsers = readArray<UserProfile>('jdt_users');
   const legacyId = localStorage.getItem('jdt_current_user_id');
   const legacy = legacyUsers.find((user) => user.uid === legacyId) || legacyUsers[0];
-  const migrated: UserProfile = legacy
+  const migrated: UserProfile = sanitizeProfile(legacy
     ? { ...DEFAULT_PROFILE, ...legacy, uid: 'local_owner', email: undefined }
-    : DEFAULT_PROFILE;
+    : DEFAULT_PROFILE);
 
   write(PROFILE_KEY, migrated);
   localStorage.removeItem('jdt_passwords');
