@@ -20,7 +20,7 @@ const DEFAULT_PROFILE: UserProfile = {
   uid: 'local_owner',
   displayName: 'My Trading Journal',
   photoURL: '',
-  tradingPlan: 'Alchemist',
+  tradingPlan: 'Personal Playbook',
   bio: 'Process first. Outcome second.',
   startingCapital: 10000,
   createdAt: new Date().toISOString(),
@@ -77,7 +77,7 @@ export const dbService = {
     displayName: string,
     photoURL: string,
     startingCapital: number,
-    tradingPlan = 'Alchemist',
+    tradingPlan = 'Personal Playbook',
     bio = '',
   ): UserProfile {
     const profile: UserProfile = {

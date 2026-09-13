@@ -191,7 +191,7 @@ export default function CashflowModal({
                     : 'text-zinc-400 hover:text-emerald-300'
                 }`}
               >
-                <ArrowUpCircle className="h-4 w-4" /> 🟢 ฝากเงินเข้า (Deposit)
+                <ArrowUpCircle className="h-4 w-4" /> ฝากเงินเข้า (Deposit)
               </button>
               <button
                 type="button"
@@ -202,7 +202,7 @@ export default function CashflowModal({
                     : 'text-zinc-400 hover:text-rose-300'
                 }`}
               >
-                <ArrowDownCircle className="h-4 w-4" /> 🔴 ถอนเงินออก (Withdrawal)
+                <ArrowDownCircle className="h-4 w-4" /> ถอนเงินออก (Withdrawal)
               </button>
             </div>
 

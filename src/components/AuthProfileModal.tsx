@@ -19,7 +19,7 @@ export default function AuthProfileModal({
   onDataRestore,
 }: ProfileModalProps) {
   const [name, setName] = useState(currentUser.displayName);
-  const [plan, setPlan] = useState(currentUser.tradingPlan || 'Alchemist');
+  const [plan, setPlan] = useState(currentUser.tradingPlan || 'Personal Playbook');
   const [bio, setBio] = useState(currentUser.bio || '');
   const [capital, setCapital] = useState(String(currentUser.startingCapital));
   const [avatar, setAvatar] = useState(currentUser.photoURL);
@@ -29,7 +29,7 @@ export default function AuthProfileModal({
 
   useEffect(() => {
     setName(currentUser.displayName);
-    setPlan(currentUser.tradingPlan || 'Alchemist');
+    setPlan(currentUser.tradingPlan || 'Personal Playbook');
     setBio(currentUser.bio || '');
     setCapital(String(currentUser.startingCapital));
     setAvatar(currentUser.photoURL);

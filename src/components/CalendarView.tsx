@@ -121,15 +121,15 @@ export default function CalendarView({
     };
   }, [trades, currentYear, currentMonth]);
 
-  // Emotion color mapper
-  const getEmotionEmoji = (emotion: TradeEmotion) => {
+  // Compact, language-neutral markers keep dense calendar cells readable.
+  const getEmotionMarker = (emotion: TradeEmotion) => {
     switch (emotion) {
-      case 'fear': return '😨';
-      case 'overconfident': return '😎';
-      case 'calm': return '🧘';
-      case 'greedy': return '🤑';
-      case 'patient': return '⏳';
-      default: return '😐';
+      case 'fear': return 'FR';
+      case 'overconfident': return 'OC';
+      case 'calm': return 'CL';
+      case 'greedy': return 'GR';
+      case 'patient': return 'PT';
+      default: return 'OT';
     }
   };
 
@@ -298,7 +298,7 @@ export default function CalendarView({
                               {dayTrades.length} ไม้
                             </span>
                             <span className="text-xs" title={`อารมณ์: ${getEmotionThai(dayTrades[0].emotion)}`}>
-                              {getEmotionEmoji(dayTrades[0].emotion)}
+                              {getEmotionMarker(dayTrades[0].emotion)}
                             </span>
                           </div>
 
@@ -418,7 +418,7 @@ export default function CalendarView({
                   <div className="flex items-center justify-between text-[10px] font-mono border-t border-amber-500/10 pt-2 text-zinc-400">
                     <div>SL {trade.sl} / TP {trade.tp}</div>
                     <div className="flex items-center gap-1 bg-[#171713] px-1.5 py-0.5 rounded">
-                      <span>{getEmotionEmoji(trade.emotion)}</span>
+                      <span className="font-mono text-[9px] text-amber-400">{getEmotionMarker(trade.emotion)}</span>
                       <span>{getEmotionThai(trade.emotion)}</span>
                     </div>
                   </div>
@@ -534,7 +534,7 @@ export default function CalendarView({
                         SL {trade.sl} / TP {trade.tp}
                       </span>
                       <span className="text-[10px] bg-amber-500/15 text-amber-300 px-1.5 py-0.5 rounded font-display font-medium">
-                        {getEmotionEmoji(trade.emotion)} {getEmotionThai(trade.emotion)}
+                        <span className="mr-1 font-mono text-[9px] text-amber-400">{getEmotionMarker(trade.emotion)}</span> {getEmotionThai(trade.emotion)}
                       </span>
                     </div>
                   </div>

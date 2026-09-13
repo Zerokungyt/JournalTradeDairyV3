@@ -135,7 +135,7 @@ export default function App() {
             </h2>
           </div>
           <div className="mt-7 border-l border-[#c7a76a]/35 pl-5 lg:mt-0">
-            <p className="editorial-kicker">{currentUser.tradingPlan || 'Alchemist'} methodology</p>
+            <p className="editorial-kicker">Review framework</p>
             <p className="mt-3 max-w-md text-sm leading-6 text-stone-400">
               {currentUser.bio || 'บันทึกสมมติฐาน ตรวจสอบกระบวนการ และปล่อยให้ข้อมูลเป็นผู้ตัดสินผลลัพธ์'}
             </p>

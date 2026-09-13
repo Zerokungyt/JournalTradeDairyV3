@@ -5,7 +5,7 @@
 ### Design direction
 
 - Rebuilt the interface around a Midnight Editorial art direction
-- Introduced a warm charcoal, parchment, and Alchemist-gold color system
+- Introduced a warm charcoal, parchment, and muted-gold color system
 - Replaced the generic SaaS header with an edition-based journal masthead
 - Removed decorative glows, excessive gradients, pill navigation, and oversized rounding
 - Added editorial typography, stronger hierarchy, and quieter data surfaces
@@ -28,7 +28,7 @@
 
 - Renamed the product from `JournalDairyTrade` to `JournalTradeDaily`
 - Reframed the interface as a decision-intelligence workspace
-- Updated default techniques to match the Alchemist research workflow
+- Updated default technique presets for structured trade review
 - Migrated existing V2.5 trades and cashflows to the single local owner profile
 
 ### Removed

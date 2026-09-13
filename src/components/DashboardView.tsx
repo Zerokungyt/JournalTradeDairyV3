@@ -173,12 +173,12 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
     });
 
     const labelMap: Record<TradeEmotion, string> = {
-      fear: '😨 กลัว (Fear)',
-      overconfident: '😎 มั่นใจเกิน (Overconfident)',
-      calm: '🧘 สงบ (Calm)',
-      greedy: '🤑 โลภ (Greed)',
-      patient: '⏳ ใจเย็น (Patient)',
-      other: '😐 อื่นๆ (Other)',
+      fear: 'กลัว (Fear)',
+      overconfident: 'มั่นใจเกิน (Overconfident)',
+      calm: 'สงบ (Calm)',
+      greedy: 'โลภ (Greed)',
+      patient: 'ใจเย็น (Patient)',
+      other: 'อื่นๆ (Other)',
     };
 
     const colors: Record<TradeEmotion, string> = {
@@ -503,7 +503,7 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
           {/* Best Day This Week */}
           <div className="bg-[#0D0D0B] p-4 rounded-sm border border-amber-500/10 relative overflow-hidden group hover:border-amber-400/30 transition-all">
             <p className="text-[10px] font-mono text-amber-400 uppercase tracking-wider font-semibold">
-              🏆 {bestDaysAnalysis.bestDayThisWeek && bestDaysAnalysis.bestDayThisWeek.pnl < 0 ? 'วันขาดทุนสูงสุดสัปดาห์นี้' : 'วันกำไรสูงสุดสัปดาห์นี้'}
+              <span className="mr-2 text-zinc-500">01</span>{bestDaysAnalysis.bestDayThisWeek && bestDaysAnalysis.bestDayThisWeek.pnl < 0 ? 'วันขาดทุนสูงสุดสัปดาห์นี้' : 'วันกำไรสูงสุดสัปดาห์นี้'}
             </p>
             {bestDaysAnalysis.bestDayThisWeek ? (
               <div className="mt-2 space-y-1">
@@ -528,7 +528,7 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
           {/* Best Day This Month */}
           <div className="bg-[#0D0D0B] p-4 rounded-sm border border-amber-500/10 relative overflow-hidden group hover:border-amber-400/30 transition-all">
             <p className="text-[10px] font-mono text-amber-400 uppercase tracking-wider font-semibold">
-              👑 {bestDaysAnalysis.bestDayThisMonth && bestDaysAnalysis.bestDayThisMonth.pnl < 0 ? 'วันขาดทุนสูงสุดเดือนนี้' : 'วันกำไรสูงสุดเดือนนี้'}
+              <span className="mr-2 text-zinc-500">02</span>{bestDaysAnalysis.bestDayThisMonth && bestDaysAnalysis.bestDayThisMonth.pnl < 0 ? 'วันขาดทุนสูงสุดเดือนนี้' : 'วันกำไรสูงสุดเดือนนี้'}
             </p>
             {bestDaysAnalysis.bestDayThisMonth ? (
               <div className="mt-2 space-y-1">
@@ -553,7 +553,7 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
           {/* All Time Best Day */}
           <div className="bg-[#0D0D0B] p-4 rounded-sm border border-amber-500/10 relative overflow-hidden group hover:border-amber-400/30 transition-all">
             <p className="text-[10px] font-mono text-amber-400 uppercase tracking-wider font-semibold">
-              🚀 {bestDaysAnalysis.bestDayAllTime && bestDaysAnalysis.bestDayAllTime.pnl < 0 ? 'วันขาดทุนสูงสุดตลอดกาล (ALL-TIME)' : 'วันกำไรสูงสุดตลอดกาล (ALL-TIME)'}
+              <span className="mr-2 text-zinc-500">03</span>{bestDaysAnalysis.bestDayAllTime && bestDaysAnalysis.bestDayAllTime.pnl < 0 ? 'วันขาดทุนสูงสุดตลอดกาล (ALL-TIME)' : 'วันกำไรสูงสุดตลอดกาล (ALL-TIME)'}
             </p>
             {bestDaysAnalysis.bestDayAllTime ? (
               <div className="mt-2 space-y-1">
@@ -662,7 +662,7 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
                             }`}
                           >
                             <div>
-                              <span className="font-bold">{idx === 0 ? '👑 ' : ''}{day.dateStr}</span>
+                              <span className="font-bold">{idx === 0 && <span className="mr-1 text-amber-400">01</span>}{day.dateStr}</span>
                               <span className="text-[10px] text-zinc-500 ml-2">({day.count} ไม้)</span>
                             </div>
                             <span className="font-bold">

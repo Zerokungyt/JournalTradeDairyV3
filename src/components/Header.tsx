@@ -19,12 +19,13 @@ export default function Header({ user, activeTab, setActiveTab, onOpenProfile, o
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0a0a09]/95 backdrop-blur-xl">
       <div className="mx-auto flex max-w-[1440px] items-center justify-between px-4 py-3 sm:px-7">
         <div className="flex min-w-0 items-center gap-3.5">
-          <div className="grid h-10 w-10 shrink-0 place-items-center border border-[#c7a76a]/50 text-sm font-medium tracking-[-.04em] text-[#d9bc82]">
-            J<span className="font-display text-lg italic">3</span>
+          <div className="flex shrink-0 items-baseline border-r border-[#c7a76a]/40 pr-3.5 text-[#d9bc82]" aria-label="JTD edition 03">
+            <span className="text-lg font-semibold tracking-[-.08em]">JTD</span>
+            <span className="ml-1 font-mono text-[7px] tracking-[.08em] text-stone-500">03</span>
           </div>
           <div className="min-w-0">
             <h1 className="truncate text-sm font-medium tracking-[-.02em] text-stone-100 sm:text-base">Journal Trade Daily</h1>
-            <p className="font-mono text-[8px] uppercase tracking-[.22em] text-stone-500">Independent research log · No. 03</p>
+            <p className="font-mono text-[8px] uppercase tracking-[.22em] text-stone-500">Independent trade journal · Est. 2026</p>
           </div>
         </div>
 
@@ -35,7 +36,7 @@ export default function Header({ user, activeTab, setActiveTab, onOpenProfile, o
         </div>
 
         <button onClick={onOpenProfile} className="group flex items-center gap-2.5 text-left">
-          <span className="hidden sm:block"><b className="block max-w-32 truncate text-xs font-medium text-stone-200">{user.displayName}</b><small className="block max-w-32 truncate font-mono text-[8px] uppercase tracking-[.12em] text-stone-500">{user.tradingPlan || 'Local profile'}</small></span>
+          <span className="hidden sm:block"><b className="block max-w-32 truncate text-xs font-medium text-stone-200">{user.displayName}</b><small className="block max-w-32 truncate font-mono text-[8px] uppercase tracking-[.12em] text-stone-500">Private workspace</small></span>
           {user.photoURL ? <img src={user.photoURL} alt={user.displayName} className="h-9 w-9 rounded-full border border-white/15 object-cover grayscale-[20%] transition group-hover:border-[#c7a76a]/60 group-hover:grayscale-0" /> : <span className="grid h-9 w-9 place-items-center rounded-full border border-[#c7a76a]/30 font-display text-lg text-[#d9bc82]">{user.displayName.slice(0, 1).toUpperCase()}</span>}
           <Settings2 className="h-3.5 w-3.5 text-stone-600 transition group-hover:text-[#c7a76a]" />
         </button>

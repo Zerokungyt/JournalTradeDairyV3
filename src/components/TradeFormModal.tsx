@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Upload, Image as ImageIcon, Check, Trash2, Calendar } from 'lucide-react';
+import { X, Upload, Image as ImageIcon, Check, Trash2, Calendar, Search, Pencil, Plus, Trophy, XCircle, AlertTriangle } from 'lucide-react';
 import { Trade, TradeEmotion } from '../types';
 import { DEFAULT_TECHNIQUES, CHART_PRESETS } from '../lib/db';
 import { motion } from 'motion/react';
@@ -242,7 +242,7 @@ export default function TradeFormModal({
         <div className="flex items-center justify-between p-4 sm:p-5 border-b border-amber-500/10 shrink-0 bg-[#0A0D18]/90">
           <div>
             <h2 className="font-display text-base sm:text-lg font-bold text-zinc-100 flex items-center gap-2">
-              {isViewMode ? '🔍 รายละเอียดออเดอร์ไม้เทรด' : isEditing ? '✏️ แก้ไขข้อมูลออเดอร์ไม้เทรด' : '➕ บันทึกออเดอร์การเทรดใหม่'}
+              {isViewMode ? <><Search className="h-4 w-4 text-amber-400" />รายละเอียดออเดอร์ไม้เทรด</> : isEditing ? <><Pencil className="h-4 w-4 text-amber-400" />แก้ไขข้อมูลออเดอร์ไม้เทรด</> : <><Plus className="h-4 w-4 text-amber-400" />บันทึกออเดอร์การเทรดใหม่</>}
             </h2>
             <p className="text-xs font-mono text-zinc-400 mt-0.5">ประจำวันที่ {date}</p>
           </div>
@@ -253,7 +253,7 @@ export default function TradeFormModal({
                 onClick={() => setIsEditing(true)}
                 className="px-3 py-1.5 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-400/30 rounded-sm text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1"
               >
-                ✏️ แก้ไขไม้เทรดนี้
+                <Pencil className="h-3.5 w-3.5" /> แก้ไขไม้เทรดนี้
               </button>
             )}
             {activeTrade && isEditing && (
@@ -303,12 +303,12 @@ export default function TradeFormModal({
                     <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">อารมณ์เข้าเทรด</p>
                     <p className="text-xs sm:text-sm font-semibold text-zinc-200 mt-1 flex items-center justify-center gap-1.5">
                       <span>
-                        {emotion === 'fear' && '😨 กลัว'}
-                        {emotion === 'overconfident' && '😎 มั่นใจเกิน'}
-                        {emotion === 'calm' && '🧘 สงบ'}
-                        {emotion === 'greedy' && '🤑 โลภ'}
-                        {emotion === 'patient' && '⏳ ใจเย็น'}
-                        {emotion === 'other' && '😐 อื่น ๆ'}
+                        {emotion === 'fear' && 'กลัว'}
+                        {emotion === 'overconfident' && 'มั่นใจเกิน'}
+                        {emotion === 'calm' && 'สงบ'}
+                        {emotion === 'greedy' && 'โลภ'}
+                        {emotion === 'patient' && 'ใจเย็น'}
+                        {emotion === 'other' && 'อื่น ๆ'}
                       </span>
                     </p>
                   </div>
@@ -435,7 +435,7 @@ export default function TradeFormModal({
                           : 'bg-[#0D0D0B] text-zinc-400 border-amber-500/10 hover:border-emerald-500/30'
                       }`}
                     >
-                      <span className="text-base">🏆</span>
+                      <Trophy className="h-4 w-4" />
                       <span>ชนะ (Win / กำไร)</span>
                     </button>
                     <button
@@ -447,7 +447,7 @@ export default function TradeFormModal({
                           : 'bg-[#0D0D0B] text-zinc-400 border-amber-500/10 hover:border-rose-500/30'
                       }`}
                     >
-                      <span className="text-base">❌</span>
+                      <XCircle className="h-4 w-4" />
                       <span>แพ้ (Loss / ขาดทุน)</span>
                     </button>
                   </div>
@@ -526,12 +526,12 @@ export default function TradeFormModal({
                   </label>
                   <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                     {[
-                      { id: 'fear', name: '😨 กลัว', desc: 'กลัวตกรถ/กลัวขาดทุน' },
-                      { id: 'overconfident', name: '😎 มั่นใจเกิน', desc: 'โอเวอร์เทรด/คิดว่าชนะชัวร์' },
-                      { id: 'calm', name: '🧘 สงบ', desc: 'เทรดตามระบบสบายใจ' },
-                      { id: 'greedy', name: '🤑 โลภ', desc: 'อยากได้คืน/อยากบวกเพิ่ม' },
-                      { id: 'patient', name: '⏳ ใจเย็น', desc: 'รอตามแผนอย่างมีวินัย' },
-                      { id: 'other', name: '😐 อื่นๆ', desc: 'สับสน/เทรดเบื่อๆ' },
+                      { id: 'fear', code: 'FR', name: 'กลัว', desc: 'กลัวตกรถ/กลัวขาดทุน' },
+                      { id: 'overconfident', code: 'OC', name: 'มั่นใจเกิน', desc: 'โอเวอร์เทรด/คิดว่าชนะชัวร์' },
+                      { id: 'calm', code: 'CL', name: 'สงบ', desc: 'เทรดตามระบบสบายใจ' },
+                      { id: 'greedy', code: 'GR', name: 'โลภ', desc: 'อยากได้คืน/อยากบวกเพิ่ม' },
+                      { id: 'patient', code: 'PT', name: 'ใจเย็น', desc: 'รอตามแผนอย่างมีวินัย' },
+                      { id: 'other', code: 'OT', name: 'อื่นๆ', desc: 'สับสน/เทรดเบื่อๆ' },
                     ].map((emo) => (
                       <button
                         key={emo.id}
@@ -544,6 +544,7 @@ export default function TradeFormModal({
                             : 'bg-[#0D0D0B]/80 text-zinc-400 border-amber-500/10 hover:bg-[#171713] hover:text-zinc-200'
                         }`}
                       >
+                        <span className="font-mono text-[9px] tracking-[.12em] opacity-70">{emo.code}</span>
                         <span>{emo.name}</span>
                       </button>
                     ))}
@@ -714,7 +715,7 @@ export default function TradeFormModal({
                     onClick={() => setIsEditing(true)}
                     className="flex items-center gap-1.5 px-4 py-2 rounded-sm bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-400/30 transition-colors text-xs font-semibold cursor-pointer"
                   >
-                    ✏️ แก้ไขข้อมูลไม้เทรด
+                    <Pencil className="h-3.5 w-3.5" /> แก้ไขข้อมูลไม้เทรด
                   </button>
                   {onDelete && (
                     <button
@@ -764,8 +765,8 @@ export default function TradeFormModal({
                 </div>
                 <div className="flex items-center gap-3">
                   {saveError && (
-                    <span className="text-[11px] text-rose-400 font-medium">
-                      ⚠️ {saveError}
+                    <span className="flex items-center gap-1 text-[11px] text-rose-400 font-medium">
+                      <AlertTriangle className="h-3.5 w-3.5" /> {saveError}
                     </span>
                   )}
                   <button
