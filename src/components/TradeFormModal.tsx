@@ -233,13 +233,13 @@ export default function TradeFormModal({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
         transition={{ duration: 0.3 }}
-        className="relative bg-[#0F0F12] border border-sky-500/20 rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]"
+        className="relative bg-[#0F0F12] border border-amber-500/20 rounded-sm w-full max-w-3xl overflow-hidden shadow-none flex flex-col max-h-[92vh]"
       >
         {/* Top Sky Bar accent */}
-        <div className="h-[3px] bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-600 shrink-0" />
+        <div className="h-px bg-[#c7a76a] shrink-0" />
 
         {/* Modal Header (Fixed at top) */}
-        <div className="flex items-center justify-between p-4 sm:p-5 border-b border-sky-500/10 shrink-0 bg-[#0A0D18]/90">
+        <div className="flex items-center justify-between p-4 sm:p-5 border-b border-amber-500/10 shrink-0 bg-[#0A0D18]/90">
           <div>
             <h2 className="font-display text-base sm:text-lg font-bold text-zinc-100 flex items-center gap-2">
               {isViewMode ? '🔍 รายละเอียดออเดอร์ไม้เทรด' : isEditing ? '✏️ แก้ไขข้อมูลออเดอร์ไม้เทรด' : '➕ บันทึกออเดอร์การเทรดใหม่'}
@@ -251,7 +251,7 @@ export default function TradeFormModal({
               <button
                 type="button"
                 onClick={() => setIsEditing(true)}
-                className="px-3 py-1.5 bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-400/30 rounded-xl text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1"
+                className="px-3 py-1.5 bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-400/30 rounded-sm text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1"
               >
                 ✏️ แก้ไขไม้เทรดนี้
               </button>
@@ -260,7 +260,7 @@ export default function TradeFormModal({
               <button
                 type="button"
                 onClick={() => setIsEditing(false)}
-                className="px-3 py-1.5 bg-[#080B15] hover:bg-[#11172A] text-sky-400 border border-sky-500/20 rounded-xl text-xs font-medium transition-colors cursor-pointer"
+                className="px-3 py-1.5 bg-[#0D0D0B] hover:bg-[#191916] text-amber-400 border border-amber-500/20 rounded-sm text-xs font-medium transition-colors cursor-pointer"
               >
                 ดูรายละเอียด
               </button>
@@ -269,7 +269,7 @@ export default function TradeFormModal({
               <button
                 type="button"
                 onClick={() => setConfirmDelete(true)}
-                className="p-2 rounded-xl bg-rose-950/20 hover:bg-rose-950/50 text-rose-400 hover:text-rose-300 border border-rose-900/30 transition-colors cursor-pointer"
+                className="p-2 rounded-sm bg-rose-950/20 hover:bg-rose-950/50 text-rose-400 hover:text-rose-300 border border-rose-900/30 transition-colors cursor-pointer"
                 title="ลบไม้เทรดนี้"
               >
                 <Trash2 className="h-4 w-4" />
@@ -277,7 +277,7 @@ export default function TradeFormModal({
             )}
             <button
               onClick={onClose}
-              className="p-1.5 rounded-xl bg-[#080B15] hover:bg-[#11172A] text-zinc-400 hover:text-sky-300 border border-sky-500/10 transition-colors cursor-pointer"
+              className="p-1.5 rounded-sm bg-[#0D0D0B] hover:bg-[#191916] text-zinc-400 hover:text-amber-300 border border-amber-500/10 transition-colors cursor-pointer"
             >
               <X className="h-4 w-4" />
             </button>
@@ -293,13 +293,13 @@ export default function TradeFormModal({
               <div className="space-y-6">
                 {/* Main metrics overview */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-                  <div className="bg-[#080B15]/80 p-3.5 rounded-xl border border-sky-500/10 text-center">
+                  <div className="bg-[#0D0D0B]/80 p-3.5 rounded-sm border border-amber-500/10 text-center">
                     <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">กำไร / ขาดทุน</p>
                     <p className={`text-base sm:text-lg font-bold mt-1 font-mono ${viewPnL >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
                       {viewPnL >= 0 ? '+' : '-'}${Math.abs(viewPnL).toLocaleString('en-US', { minimumFractionDigits: viewPnL % 1 !== 0 ? 2 : 0, maximumFractionDigits: 2 })}
                     </p>
                   </div>
-                  <div className="bg-[#080B15]/80 p-3.5 rounded-xl border border-sky-500/10 text-center">
+                  <div className="bg-[#0D0D0B]/80 p-3.5 rounded-sm border border-amber-500/10 text-center">
                     <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">อารมณ์เข้าเทรด</p>
                     <p className="text-xs sm:text-sm font-semibold text-zinc-200 mt-1 flex items-center justify-center gap-1.5">
                       <span>
@@ -312,11 +312,11 @@ export default function TradeFormModal({
                       </span>
                     </p>
                   </div>
-                  <div className="bg-[#080B15]/80 p-3.5 rounded-xl border border-sky-500/10 text-center">
+                  <div className="bg-[#0D0D0B]/80 p-3.5 rounded-sm border border-amber-500/10 text-center">
                     <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Take Profit (TP)</p>
-                    <p className="text-xs sm:text-sm font-semibold text-sky-400 mt-1 font-mono">{activeTrade ? activeTrade.tp : tpInput} pips</p>
+                    <p className="text-xs sm:text-sm font-semibold text-amber-400 mt-1 font-mono">{activeTrade ? activeTrade.tp : tpInput} pips</p>
                   </div>
-                  <div className="bg-[#080B15]/80 p-3.5 rounded-xl border border-sky-500/10 text-center">
+                  <div className="bg-[#0D0D0B]/80 p-3.5 rounded-sm border border-amber-500/10 text-center">
                     <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Stop Loss (SL)</p>
                     <p className="text-xs sm:text-sm font-semibold text-zinc-300 mt-1 font-mono">{activeTrade ? activeTrade.sl : slInput} pips</p>
                   </div>
@@ -327,19 +327,19 @@ export default function TradeFormModal({
                   <div className="space-y-4">
                     <div>
                       <h4 className="text-xs font-mono text-zinc-400 uppercase tracking-wider">เทคนิคที่ใช้เข้าเทรด</h4>
-                      <p className="text-zinc-200 font-semibold mt-1 bg-[#080B15]/60 border border-sky-500/10 px-3 py-2 rounded-lg">
+                      <p className="text-zinc-200 font-semibold mt-1 bg-[#0D0D0B]/60 border border-amber-500/10 px-3 py-2 rounded-sm">
                         {activeTrade?.technique}
                       </p>
                     </div>
                     <div>
                       <h4 className="text-xs font-mono text-zinc-400 uppercase tracking-wider">สาเหตุ / แผนการเข้าเทรด</h4>
-                      <div className="text-zinc-300 text-sm mt-1 bg-[#080B15]/60 border border-sky-500/10 px-3 py-2 rounded-lg min-h-[70px] whitespace-pre-wrap">
+                      <div className="text-zinc-300 text-sm mt-1 bg-[#0D0D0B]/60 border border-amber-500/10 px-3 py-2 rounded-sm min-h-[70px] whitespace-pre-wrap">
                         {reason || 'ไม่ได้ระบุ'}
                       </div>
                     </div>
                     <div>
                       <h4 className="text-xs font-mono text-zinc-400 uppercase tracking-wider">บันทึกเพิ่มเติม (Notes)</h4>
-                      <div className="text-zinc-300 text-sm mt-1 bg-[#080B15]/60 border border-sky-500/10 px-3 py-2 rounded-lg min-h-[50px] whitespace-pre-wrap">
+                      <div className="text-zinc-300 text-sm mt-1 bg-[#0D0D0B]/60 border border-amber-500/10 px-3 py-2 rounded-sm min-h-[50px] whitespace-pre-wrap">
                         {notes || 'ไม่ได้บันทึกโน้ตไว้'}
                       </div>
                     </div>
@@ -349,7 +349,7 @@ export default function TradeFormModal({
                   <div className="flex flex-col">
                     <h4 className="text-xs font-mono text-zinc-400 uppercase tracking-wider mb-2">ภาพแคปหน้าจอกราฟ</h4>
                     {imageUrl ? (
-                      <div className="flex-1 relative rounded-xl overflow-hidden bg-[#080B15] border border-sky-500/10 flex items-center justify-center min-h-[180px]">
+                      <div className="flex-1 relative rounded-sm overflow-hidden bg-[#0D0D0B] border border-amber-500/10 flex items-center justify-center min-h-[180px]">
                         <img
                           src={imageUrl}
                           alt="Trade screenshot"
@@ -358,7 +358,7 @@ export default function TradeFormModal({
                         />
                       </div>
                     ) : (
-                      <div className="flex-1 border border-dashed border-sky-500/10 rounded-xl flex items-center justify-center min-h-[180px] text-zinc-500 bg-[#080B15]">
+                      <div className="flex-1 border border-dashed border-amber-500/10 rounded-sm flex items-center justify-center min-h-[180px] text-zinc-500 bg-[#0D0D0B]">
                         <ImageIcon className="h-8 w-8" />
                       </div>
                     )}
@@ -372,13 +372,13 @@ export default function TradeFormModal({
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="space-y-1.5">
                     <label className="block text-xs font-mono text-zinc-400 uppercase tracking-wider flex items-center gap-1">
-                      <Calendar className="h-3 w-3 text-sky-400" /> วันที่เข้าเทรด
+                      <Calendar className="h-3 w-3 text-amber-400" /> วันที่เข้าเทรด
                     </label>
                     <input
                       type="date"
                       value={date}
                       onChange={(e) => setDate(e.target.value)}
-                      className="w-full bg-[#080B15] border border-sky-500/15 focus:border-sky-400 rounded-xl px-3 py-2 text-xs text-zinc-100 focus:outline-none font-mono"
+                      className="w-full bg-[#0D0D0B] border border-amber-500/15 focus:border-amber-400 rounded-sm px-3 py-2 text-xs text-zinc-100 focus:outline-none font-mono"
                     />
                   </div>
 
@@ -391,7 +391,7 @@ export default function TradeFormModal({
                       value={technique}
                       onChange={(e) => setTechnique(e.target.value)}
                       placeholder="เช่น EMA Bounce + SR Flip, SMC Order Block..."
-                      className="w-full bg-[#080B15] border border-sky-500/15 focus:border-sky-400 rounded-xl px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:ring-1 focus:ring-sky-400 font-sans"
+                      className="w-full bg-[#0D0D0B] border border-amber-500/15 focus:border-amber-400 rounded-sm px-3 py-2 text-xs text-zinc-100 focus:outline-none focus:ring-1 focus:ring-amber-400 font-sans"
                     />
                   </div>
                 </div>
@@ -409,8 +409,8 @@ export default function TradeFormModal({
                           onClick={() => setTechnique(tech)}
                           className={`px-2.5 py-1 text-[11px] rounded-full transition-all border cursor-pointer ${
                             isSelected
-                              ? 'bg-sky-500/15 border-sky-400 text-sky-300 font-medium'
-                              : 'bg-[#080B15] border-sky-500/10 hover:border-sky-400/30 hover:text-zinc-200 text-zinc-400'
+                              ? 'bg-amber-500/15 border-amber-400 text-amber-300 font-medium'
+                              : 'bg-[#0D0D0B] border-amber-500/10 hover:border-amber-400/30 hover:text-zinc-200 text-zinc-400'
                           }`}
                         >
                           {tech}
@@ -429,10 +429,10 @@ export default function TradeFormModal({
                     <button
                       type="button"
                       onClick={() => setTradeResult('win')}
-                      className={`py-2.5 px-4 rounded-xl border font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                      className={`py-2.5 px-4 rounded-sm border font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
                         tradeResult === 'win'
-                          ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
-                          : 'bg-[#080B15] text-zinc-400 border-sky-500/10 hover:border-emerald-500/30'
+                          ? 'bg-emerald-500/15 text-emerald-300 border-emerald-400'
+                          : 'bg-[#0D0D0B] text-zinc-400 border-amber-500/10 hover:border-emerald-500/30'
                       }`}
                     >
                       <span className="text-base">🏆</span>
@@ -441,10 +441,10 @@ export default function TradeFormModal({
                     <button
                       type="button"
                       onClick={() => setTradeResult('loss')}
-                      className={`py-2.5 px-4 rounded-xl border font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
+                      className={`py-2.5 px-4 rounded-sm border font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
                         tradeResult === 'loss'
-                          ? 'bg-rose-500/20 text-rose-300 border-rose-400 shadow-[0_0_15px_rgba(244,63,94,0.2)]'
-                          : 'bg-[#080B15] text-zinc-400 border-sky-500/10 hover:border-rose-500/30'
+                          ? 'bg-rose-500/15 text-rose-300 border-rose-400'
+                          : 'bg-[#0D0D0B] text-zinc-400 border-amber-500/10 hover:border-rose-500/30'
                       }`}
                     >
                       <span className="text-base">❌</span>
@@ -476,7 +476,7 @@ export default function TradeFormModal({
                           setAmountInput(cleaned);
                         }}
                         placeholder="เช่น 1000"
-                        className={`w-full bg-[#080B15] border border-sky-500/15 focus:border-sky-400 rounded-xl pl-9 pr-14 py-2 text-sm focus:outline-none font-mono font-bold ${
+                        className={`w-full bg-[#0D0D0B] border border-amber-500/15 focus:border-amber-400 rounded-sm pl-9 pr-14 py-2 text-sm focus:outline-none font-mono font-bold ${
                           tradeResult === 'win' ? 'text-emerald-400' : 'text-rose-400'
                         }`}
                       />
@@ -500,7 +500,7 @@ export default function TradeFormModal({
                       value={tpInput}
                       onChange={(e) => setTpInput(e.target.value.replace(/[^0-9.]/g, ''))}
                       placeholder="100"
-                      className="w-full bg-[#080B15] border border-sky-500/15 focus:border-sky-400 rounded-xl px-3 py-2 text-sm text-zinc-100 focus:outline-none font-mono"
+                      className="w-full bg-[#0D0D0B] border border-amber-500/15 focus:border-amber-400 rounded-sm px-3 py-2 text-sm text-zinc-100 focus:outline-none font-mono"
                     />
                   </div>
 
@@ -514,7 +514,7 @@ export default function TradeFormModal({
                       value={slInput}
                       onChange={(e) => setSlInput(e.target.value.replace(/[^0-9.]/g, ''))}
                       placeholder="50"
-                      className="w-full bg-[#080B15] border border-sky-500/15 focus:border-sky-400 rounded-xl px-3 py-2 text-sm text-zinc-100 focus:outline-none font-mono"
+                      className="w-full bg-[#0D0D0B] border border-amber-500/15 focus:border-amber-400 rounded-sm px-3 py-2 text-sm text-zinc-100 focus:outline-none font-mono"
                     />
                   </div>
                 </div>
@@ -538,10 +538,10 @@ export default function TradeFormModal({
                         type="button"
                         onClick={() => setEmotion(emo.id as TradeEmotion)}
                         title={emo.desc}
-                        className={`py-2 px-1 rounded-xl text-center text-xs flex flex-col items-center justify-center gap-1 border transition-all cursor-pointer ${
+                        className={`py-2 px-1 rounded-sm text-center text-xs flex flex-col items-center justify-center gap-1 border transition-all cursor-pointer ${
                           emotion === emo.id
-                            ? 'bg-sky-500/15 text-sky-300 border-sky-400 shadow-sm font-semibold'
-                            : 'bg-[#080B15]/80 text-zinc-400 border-sky-500/10 hover:bg-[#10172A] hover:text-zinc-200'
+                            ? 'bg-amber-500/15 text-amber-300 border-amber-400 shadow-sm font-semibold'
+                            : 'bg-[#0D0D0B]/80 text-zinc-400 border-amber-500/10 hover:bg-[#171713] hover:text-zinc-200'
                         }`}
                       >
                         <span>{emo.name}</span>
@@ -561,7 +561,7 @@ export default function TradeFormModal({
                       value={reason}
                       onChange={(e) => setReason(e.target.value)}
                       placeholder="เช่น ชนแนวต้าน H4 เกิด RSI Divergence หรือปล่อยว่างได้..."
-                      className="w-full bg-[#080B15] border border-sky-500/15 focus:border-sky-400 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:ring-1 focus:ring-sky-400 font-sans resize-none"
+                      className="w-full bg-[#0D0D0B] border border-amber-500/15 focus:border-amber-400 rounded-sm px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:ring-1 focus:ring-amber-400 font-sans resize-none"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -573,7 +573,7 @@ export default function TradeFormModal({
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                       placeholder="เช่น ปิดก่อนข่าว หรือ เลื่อน SL กันหน้าทุน..."
-                      className="w-full bg-[#080B15] border border-sky-500/15 focus:border-sky-400 rounded-xl px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:ring-1 focus:ring-sky-400 font-sans resize-none"
+                      className="w-full bg-[#0D0D0B] border border-amber-500/15 focus:border-amber-400 rounded-sm px-3 py-2 text-xs text-zinc-200 focus:outline-none focus:ring-1 focus:ring-amber-400 font-sans resize-none"
                     />
                   </div>
                 </div>
@@ -584,7 +584,7 @@ export default function TradeFormModal({
                     <label className="block text-xs font-mono text-zinc-400 uppercase tracking-wider">
                       แนบรูปภาพกราฟวิเคราะห์ <span className="text-zinc-500 text-[10px] font-sans normal-case">(ไม่บังคับ)</span>
                     </label>
-                    <span className="text-[10px] text-sky-400 font-mono font-medium">เลือกจากเทมเพลต หรือ ลากไฟล์</span>
+                    <span className="text-[10px] text-amber-400 font-mono font-medium">เลือกจากเทมเพลต หรือ ลากไฟล์</span>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -597,8 +597,8 @@ export default function TradeFormModal({
                             key={p.name}
                             type="button"
                             onClick={() => setImageUrl(p.url)}
-                            className={`relative h-12 rounded-lg overflow-hidden border bg-[#080B15] transition-all cursor-pointer ${
-                              imageUrl === p.url ? 'border-sky-400 ring-1 ring-sky-400' : 'border-sky-500/10 hover:border-sky-400/40'
+                            className={`relative h-12 rounded-sm overflow-hidden border bg-[#0D0D0B] transition-all cursor-pointer ${
+                              imageUrl === p.url ? 'border-amber-400 ring-1 ring-amber-400' : 'border-amber-500/10 hover:border-amber-400/40'
                             }`}
                           >
                             <img
@@ -624,13 +624,13 @@ export default function TradeFormModal({
                           onDragLeave={handleDragLeave}
                           onDrop={handleDrop}
                           onClick={() => fileInputRef.current?.click()}
-                          className={`border border-dashed rounded-xl flex flex-col items-center justify-center p-2.5 text-center cursor-pointer min-h-[90px] transition-all ${
+                          className={`border border-dashed rounded-sm flex flex-col items-center justify-center p-2.5 text-center cursor-pointer min-h-[90px] transition-all ${
                             isDragging
-                              ? 'border-sky-400 bg-sky-500/10 text-sky-300'
-                              : 'border-sky-500/10 bg-[#080B15]/40 text-zinc-400 hover:border-sky-400/40 hover:text-zinc-200'
+                              ? 'border-amber-400 bg-amber-500/10 text-amber-300'
+                              : 'border-amber-500/10 bg-[#0D0D0B]/40 text-zinc-400 hover:border-amber-400/40 hover:text-zinc-200'
                           }`}
                         >
-                          <Upload className="h-4 w-4 mb-1 text-sky-400" />
+                          <Upload className="h-4 w-4 mb-1 text-amber-400" />
                           <span className="text-[10px] font-medium">ลากไฟล์มาที่นี่ หรือคลิกอัปโหลด</span>
                           <input
                             type="file"
@@ -648,10 +648,10 @@ export default function TradeFormModal({
                             value={imageUrl}
                             onChange={(e) => setImageUrl(e.target.value)}
                             placeholder="วางลิงก์รูปภาพ (URL)"
-                            className="w-full bg-[#080B15] border border-sky-500/15 focus:border-sky-400 rounded-xl px-2.5 py-1.5 text-xs text-zinc-200 focus:outline-none"
+                            className="w-full bg-[#0D0D0B] border border-amber-500/15 focus:border-amber-400 rounded-sm px-2.5 py-1.5 text-xs text-zinc-200 focus:outline-none"
                           />
                           {imageUrl ? (
-                            <div className="relative h-14 w-full rounded-lg overflow-hidden bg-[#080B15] border border-sky-500/10 flex items-center justify-center">
+                            <div className="relative h-14 w-full rounded-sm overflow-hidden bg-[#0D0D0B] border border-amber-500/10 flex items-center justify-center">
                               <img
                                 src={imageUrl}
                                 alt="trade setup preview"
@@ -667,7 +667,7 @@ export default function TradeFormModal({
                               </button>
                             </div>
                           ) : (
-                            <div className="h-14 w-full rounded-lg border border-sky-500/10 bg-[#080B15]/40 flex items-center justify-center text-zinc-600 text-[11px] font-mono">
+                            <div className="h-14 w-full rounded-sm border border-amber-500/10 bg-[#0D0D0B]/40 flex items-center justify-center text-zinc-600 text-[11px] font-mono">
                               ไม่มีภาพตัวอย่าง
                             </div>
                           )}
@@ -681,9 +681,9 @@ export default function TradeFormModal({
           </div>
 
           {/* Form Actions Footer (FIXED at bottom, ALWAYS visible) */}
-          <div className="flex items-center justify-between p-3.5 sm:p-4 px-5 sm:px-6 border-t border-sky-500/15 bg-[#0A0D18] shrink-0">
+          <div className="flex items-center justify-between p-3.5 sm:p-4 px-5 sm:px-6 border-t border-amber-500/15 bg-[#0A0D18] shrink-0">
             {confirmDelete ? (
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between w-full gap-2 p-2 bg-rose-950/40 border border-rose-500/30 rounded-xl">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between w-full gap-2 p-2 bg-rose-950/40 border border-rose-500/30 rounded-sm">
                 <div className="flex items-center gap-2 px-1 text-xs text-rose-300 font-semibold">
                   <Trash2 className="h-4 w-4 text-rose-400 shrink-0" />
                   <span>คุณแน่ใจหรือไม่ที่จะลบไม้เทรดนี้? (ไม่สามารถกู้คืนได้)</span>
@@ -692,14 +692,14 @@ export default function TradeFormModal({
                   <button
                     type="button"
                     onClick={() => setConfirmDelete(false)}
-                    className="px-3.5 py-1.5 bg-[#080B15] hover:bg-[#11172A] text-zinc-300 border border-sky-500/10 rounded-lg text-xs font-medium transition-colors cursor-pointer"
+                    className="px-3.5 py-1.5 bg-[#0D0D0B] hover:bg-[#191916] text-zinc-300 border border-amber-500/10 rounded-sm text-xs font-medium transition-colors cursor-pointer"
                   >
                     ยกเลิก
                   </button>
                   <button
                     type="button"
                     onClick={handleExecuteDelete}
-                    className="px-4 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold transition-all shadow-md shadow-rose-600/30 cursor-pointer flex items-center gap-1.5 active:scale-95"
+                    className="px-4 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-sm text-xs font-bold transition-all shadow-none shadow-rose-600/30 cursor-pointer flex items-center gap-1.5 active:scale-95"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                     ยืนยันลบไม้
@@ -712,7 +712,7 @@ export default function TradeFormModal({
                   <button
                     type="button"
                     onClick={() => setIsEditing(true)}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-400/30 transition-colors text-xs font-semibold cursor-pointer"
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-sm bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-400/30 transition-colors text-xs font-semibold cursor-pointer"
                   >
                     ✏️ แก้ไขข้อมูลไม้เทรด
                   </button>
@@ -720,7 +720,7 @@ export default function TradeFormModal({
                     <button
                       type="button"
                       onClick={() => setConfirmDelete(true)}
-                      className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-950/20 hover:bg-rose-950/50 text-rose-400 border border-rose-900/50 hover:border-rose-800 transition-colors text-xs font-semibold cursor-pointer"
+                      className="flex items-center gap-1.5 px-3.5 py-2 rounded-sm bg-rose-950/20 hover:bg-rose-950/50 text-rose-400 border border-rose-900/50 hover:border-rose-800 transition-colors text-xs font-semibold cursor-pointer"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                       ลบไม้
@@ -730,7 +730,7 @@ export default function TradeFormModal({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-5 py-2 bg-[#080B15] hover:bg-[#11172A] text-zinc-300 border border-sky-500/10 rounded-xl text-xs font-medium transition-colors cursor-pointer"
+                  className="px-5 py-2 bg-[#0D0D0B] hover:bg-[#191916] text-zinc-300 border border-amber-500/10 rounded-sm text-xs font-medium transition-colors cursor-pointer"
                 >
                   ปิดหน้าต่าง
                 </button>
@@ -747,7 +747,7 @@ export default function TradeFormModal({
                         onClose(); // Close modal
                       }
                     }}
-                    className="px-4 sm:px-5 py-2 bg-[#080B15] hover:bg-[#11172A] text-zinc-300 border border-sky-500/10 rounded-xl text-xs font-medium transition-colors cursor-pointer"
+                    className="px-4 sm:px-5 py-2 bg-[#0D0D0B] hover:bg-[#191916] text-zinc-300 border border-amber-500/10 rounded-sm text-xs font-medium transition-colors cursor-pointer"
                   >
                     {isEditing ? 'ยกเลิกการแก้ไข' : 'ยกเลิก'}
                   </button>
@@ -755,7 +755,7 @@ export default function TradeFormModal({
                     <button
                       type="button"
                       onClick={() => setConfirmDelete(true)}
-                      className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-rose-950/20 hover:bg-rose-950/50 text-rose-400 border border-rose-900/50 hover:border-rose-800 transition-colors text-xs font-semibold cursor-pointer"
+                      className="flex items-center gap-1.5 px-3 py-2 rounded-sm bg-rose-950/20 hover:bg-rose-950/50 text-rose-400 border border-rose-900/50 hover:border-rose-800 transition-colors text-xs font-semibold cursor-pointer"
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                       ลบไม้
@@ -774,10 +774,10 @@ export default function TradeFormModal({
                     onClick={(e) => {
                       handleSubmit(e);
                     }}
-                    className={`flex items-center gap-1.5 px-5 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-lg transition-all cursor-pointer ${
+                    className={`flex items-center gap-1.5 px-5 sm:px-6 py-2.5 rounded-sm text-xs sm:text-sm font-bold shadow-none transition-all cursor-pointer ${
                       saveSuccess
                         ? 'bg-emerald-500 text-white shadow-emerald-500/30'
-                        : 'bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-600 hover:from-sky-300 hover:to-blue-400 text-zinc-950 shadow-sky-500/20 hover:shadow-sky-500/30 active:scale-95'
+                        : 'bg-[#c7a76a] hover:bg-[#d9bc82] text-zinc-950 shadow-amber-500/20 hover:shadow-amber-500/30 active:scale-95'
                     }`}
                   >
                     {saveSuccess ? (

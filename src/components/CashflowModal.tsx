@@ -102,15 +102,15 @@ export default function CashflowModal({
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="relative bg-[#0F121E] border border-sky-500/20 rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl my-8"
+        className="relative bg-[#0F121E] border border-amber-500/20 rounded-sm w-full max-w-2xl overflow-hidden shadow-none my-8"
       >
         {/* Accent Bar */}
-        <div className="h-[3px] bg-gradient-to-r from-emerald-400 via-sky-500 to-indigo-500" />
+        <div className="h-px bg-[#c7a76a]" />
 
         {/* Modal Header */}
-        <div className="flex items-center justify-between p-6 border-b border-sky-500/10 bg-[#0A0D18]">
+        <div className="flex items-center justify-between p-6 border-b border-amber-500/10 bg-[#0A0D18]">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-2xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
+            <div className="h-10 w-10 rounded-sm bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
               <Wallet className="h-5 w-5" />
             </div>
             <div>
@@ -124,7 +124,7 @@ export default function CashflowModal({
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-[#080B15] hover:bg-[#11172A] text-zinc-400 hover:text-sky-300 border border-sky-500/10 transition-all cursor-pointer"
+            className="p-2 rounded-sm bg-[#0D0D0B] hover:bg-[#191916] text-zinc-400 hover:text-amber-300 border border-amber-500/10 transition-all cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
@@ -134,7 +134,7 @@ export default function CashflowModal({
         <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
           {/* Summary Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="bg-[#080B15] border border-emerald-500/20 rounded-2xl p-4 space-y-1">
+            <div className="bg-[#0D0D0B] border border-emerald-500/20 rounded-sm p-4 space-y-1">
               <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-wider flex items-center gap-1">
                 <ArrowUpRight className="h-3.5 w-3.5" /> ยอดฝากเงินรวม (Total Deposit)
               </span>
@@ -143,7 +143,7 @@ export default function CashflowModal({
               </p>
             </div>
 
-            <div className="bg-[#080B15] border border-rose-500/20 rounded-2xl p-4 space-y-1">
+            <div className="bg-[#0D0D0B] border border-rose-500/20 rounded-sm p-4 space-y-1">
               <span className="text-[10px] font-mono text-rose-400 uppercase tracking-wider flex items-center gap-1">
                 <ArrowDownRight className="h-3.5 w-3.5" /> ยอดถอนเงินรวม (Total Withdrawal)
               </span>
@@ -152,11 +152,11 @@ export default function CashflowModal({
               </p>
             </div>
 
-            <div className="bg-[#080B15] border border-sky-500/20 rounded-2xl p-4 space-y-1">
-              <span className="text-[10px] font-mono text-sky-400 uppercase tracking-wider flex items-center gap-1">
+            <div className="bg-[#0D0D0B] border border-amber-500/20 rounded-sm p-4 space-y-1">
+              <span className="text-[10px] font-mono text-amber-400 uppercase tracking-wider flex items-center gap-1">
                 <TrendingUp className="h-3.5 w-3.5" /> กระแสเงินสดสุทธิ (Net Cashflow)
               </span>
-              <p className={`text-xl font-mono font-bold ${netCashflow >= 0 ? 'text-sky-300' : 'text-rose-400'}`}>
+              <p className={`text-xl font-mono font-bold ${netCashflow >= 0 ? 'text-amber-300' : 'text-rose-400'}`}>
                 {netCashflow >= 0 ? '+' : ''}${netCashflow.toLocaleString('en-US', { minimumFractionDigits: 2 })}
               </p>
             </div>
@@ -164,30 +164,30 @@ export default function CashflowModal({
 
           {/* Messages */}
           {error && (
-            <div className="p-3 bg-rose-950/40 border border-rose-800/80 text-rose-300 rounded-xl text-xs font-semibold">
+            <div className="p-3 bg-rose-950/40 border border-rose-800/80 text-rose-300 rounded-sm text-xs font-semibold">
               {error}
             </div>
           )}
           {success && (
-            <div className="p-3 bg-emerald-950/40 border border-emerald-800/80 text-emerald-300 rounded-xl text-xs font-semibold">
+            <div className="p-3 bg-emerald-950/40 border border-emerald-800/80 text-emerald-300 rounded-sm text-xs font-semibold">
               {success}
             </div>
           )}
 
           {/* Add New Cashflow Form */}
-          <form onSubmit={handleSubmit} className="bg-[#080B15] border border-sky-500/15 rounded-2xl p-5 space-y-4">
-            <h3 className="text-xs font-mono font-bold text-sky-400 uppercase tracking-wider flex items-center gap-1.5">
+          <form onSubmit={handleSubmit} className="bg-[#0D0D0B] border border-amber-500/15 rounded-sm p-5 space-y-4">
+            <h3 className="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
               <Plus className="h-4 w-4" /> บันทึกการทำรายการใหม่
             </h3>
 
             {/* Type selector */}
-            <div className="grid grid-cols-2 gap-2 p-1 bg-[#05070E] rounded-xl border border-sky-500/10">
+            <div className="grid grid-cols-2 gap-2 p-1 bg-[#05070E] rounded-sm border border-amber-500/10">
               <button
                 type="button"
                 onClick={() => setType('deposit')}
-                className={`py-2 text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center gap-2 ${
+                className={`py-2 text-xs font-bold rounded-sm transition-all cursor-pointer flex items-center justify-center gap-2 ${
                   type === 'deposit'
-                    ? 'bg-emerald-500 text-zinc-950 shadow-md shadow-emerald-500/20'
+                    ? 'bg-emerald-500 text-zinc-950 shadow-none shadow-emerald-500/20'
                     : 'text-zinc-400 hover:text-emerald-300'
                 }`}
               >
@@ -196,9 +196,9 @@ export default function CashflowModal({
               <button
                 type="button"
                 onClick={() => setType('withdrawal')}
-                className={`py-2 text-xs font-bold rounded-lg transition-all cursor-pointer flex items-center justify-center gap-2 ${
+                className={`py-2 text-xs font-bold rounded-sm transition-all cursor-pointer flex items-center justify-center gap-2 ${
                   type === 'withdrawal'
-                    ? 'bg-rose-500 text-white shadow-md shadow-rose-500/20'
+                    ? 'bg-rose-500 text-white shadow-none shadow-rose-500/20'
                     : 'text-zinc-400 hover:text-rose-300'
                 }`}
               >
@@ -221,7 +221,7 @@ export default function CashflowModal({
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     placeholder="1000.00"
-                    className="w-full bg-[#0F121E] border border-sky-500/15 focus:border-sky-400 rounded-xl pl-9 pr-3 py-2 text-xs text-zinc-100 font-mono focus:outline-none"
+                    className="w-full bg-[#0F121E] border border-amber-500/15 focus:border-amber-400 rounded-sm pl-9 pr-3 py-2 text-xs text-zinc-100 font-mono focus:outline-none"
                   />
                 </div>
               </div>
@@ -237,7 +237,7 @@ export default function CashflowModal({
                     required
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    className="w-full bg-[#0F121E] border border-sky-500/15 focus:border-sky-400 rounded-xl pl-9 pr-3 py-2 text-xs text-zinc-100 font-mono focus:outline-none"
+                    className="w-full bg-[#0F121E] border border-amber-500/15 focus:border-amber-400 rounded-sm pl-9 pr-3 py-2 text-xs text-zinc-100 font-mono focus:outline-none"
                   />
                 </div>
               </div>
@@ -254,17 +254,17 @@ export default function CashflowModal({
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
                   placeholder={type === 'deposit' ? 'เช่น เติมทุนเพิ่มรับเทรนด์ทองคำ' : 'เช่น ถอนกำไรสัปดาห์นี้'}
-                  className="w-full bg-[#0F121E] border border-sky-500/15 focus:border-sky-400 rounded-xl pl-9 pr-3 py-2 text-xs text-zinc-100 focus:outline-none"
+                  className="w-full bg-[#0F121E] border border-amber-500/15 focus:border-amber-400 rounded-sm pl-9 pr-3 py-2 text-xs text-zinc-100 focus:outline-none"
                 />
               </div>
             </div>
 
             <button
               type="submit"
-              className={`w-full py-2.5 font-bold text-xs rounded-xl shadow-lg transition-all cursor-pointer flex items-center justify-center gap-2 ${
+              className={`w-full py-2.5 font-bold text-xs rounded-sm shadow-none transition-all cursor-pointer flex items-center justify-center gap-2 ${
                 type === 'deposit'
-                  ? 'bg-gradient-to-r from-emerald-400 to-teal-500 text-zinc-950 hover:from-emerald-300 hover:to-teal-400 shadow-emerald-500/20'
-                  : 'bg-gradient-to-r from-rose-500 to-red-600 text-white hover:from-rose-400 hover:to-red-500 shadow-rose-500/20'
+                  ? 'bg-emerald-400 text-zinc-950 hover:bg-emerald-300 shadow-emerald-500/20'
+                  : 'bg-rose-500 text-white hover:bg-rose-400 shadow-rose-500/20'
               }`}
             >
               <Sparkles className="h-4 w-4" />
@@ -279,7 +279,7 @@ export default function CashflowModal({
             </h3>
 
             {cashflows.length === 0 ? (
-              <div className="text-center py-8 bg-[#080B15]/50 rounded-2xl border border-dashed border-sky-500/10 text-zinc-500 text-xs">
+              <div className="text-center py-8 bg-[#0D0D0B]/50 rounded-sm border border-dashed border-amber-500/10 text-zinc-500 text-xs">
                 ยังไม่มีประวัติการฝากหรือถอนเงินในระบบ
               </div>
             ) : (
@@ -287,10 +287,10 @@ export default function CashflowModal({
                 {cashflows.map((cf) => (
                   <div
                     key={cf.id}
-                    className="flex items-center justify-between p-3 bg-[#080B15] border border-sky-500/10 hover:border-sky-500/20 rounded-xl transition-all"
+                    className="flex items-center justify-between p-3 bg-[#0D0D0B] border border-amber-500/10 hover:border-amber-500/20 rounded-sm transition-all"
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`h-8 w-8 rounded-xl flex items-center justify-center font-bold ${
+                      <div className={`h-8 w-8 rounded-sm flex items-center justify-center font-bold ${
                         cf.type === 'deposit' 
                           ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' 
                           : 'bg-rose-500/10 border border-rose-500/20 text-rose-400'
@@ -313,7 +313,7 @@ export default function CashflowModal({
                         {cf.type === 'deposit' ? '+' : '-'}${cf.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                       </span>
                       {deletingCashflowId === cf.id ? (
-                        <div className="flex items-center gap-1 bg-rose-950/70 border border-rose-500/30 px-2 py-0.5 rounded-lg">
+                        <div className="flex items-center gap-1 bg-rose-950/70 border border-rose-500/30 px-2 py-0.5 rounded-sm">
                           <span className="text-[10px] text-rose-300">ลบ?</span>
                           <button
                             type="button"
@@ -334,7 +334,7 @@ export default function CashflowModal({
                         <button
                           type="button"
                           onClick={() => setDeletingCashflowId(cf.id)}
-                          className="p-1.5 text-zinc-600 hover:text-rose-400 hover:bg-rose-950/30 rounded-lg transition-colors cursor-pointer"
+                          className="p-1.5 text-zinc-600 hover:text-rose-400 hover:bg-rose-950/30 rounded-sm transition-colors cursor-pointer"
                           title="ลบรายการ"
                         >
                           <Trash2 className="h-3.5 w-3.5" />

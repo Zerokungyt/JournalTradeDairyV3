@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.1.0-editorial — 2026-09-13
+
+### Design direction
+
+- Rebuilt the interface around a Midnight Editorial art direction
+- Introduced a warm charcoal, parchment, and Alchemist-gold color system
+- Replaced the generic SaaS header with an edition-based journal masthead
+- Removed decorative glows, excessive gradients, pill navigation, and oversized rounding
+- Added editorial typography, stronger hierarchy, and quieter data surfaces
+- Improved calendar density and mobile sizing while preserving one-tap entry creation
+- Unified journal, analytics, profile, trade, and capital-ledger surfaces
+- Added reduced-motion support and more deliberate focus states
+
 ## 3.0.0-foundation — 2026-09-13
 
 ### Added
@@ -29,4 +42,3 @@
 
 - TypeScript type-check: pass
 - Vite production build: pass
-

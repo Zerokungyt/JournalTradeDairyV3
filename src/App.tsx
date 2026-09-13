@@ -7,7 +7,7 @@ import AuthProfileModal from './components/AuthProfileModal';
 import CashflowModal from './components/CashflowModal';
 import { dbService } from './lib/db';
 import { Trade, UserProfile } from './types';
-import { Clock, Database, Sparkles } from 'lucide-react';
+import { Clock, Database } from 'lucide-react';
 
 
 export default function App() {
@@ -108,11 +108,7 @@ export default function App() {
   }, [currentUser, trades, cashflows]);
 
   return (
-    <div className="min-h-screen bg-[#050810] text-zinc-100 font-sans flex flex-col selection:bg-cyan-500/30 selection:text-cyan-100 relative overflow-hidden">
-      {/* Decorative Elegant Emerald / Ambient glows in the background */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-teal-500/5 rounded-full blur-[120px] pointer-events-none" />
-
+    <div className="relative flex min-h-screen flex-col overflow-hidden bg-transparent font-sans text-stone-100 selection:bg-[#c7a76a] selection:text-stone-950">
       {/* Main App Header */}
       <Header
         user={currentUser}
@@ -126,29 +122,29 @@ export default function App() {
       />
 
       {/* Main Container Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-5 py-5 sm:py-8 z-10 space-y-6 sm:space-y-8">
-        {/* Quote / Motivational Banner (Fosters Trading Discipline) */}
-        <div className="bg-gradient-to-r from-[#0b1220] to-[#090d17] border border-cyan-400/10 p-5 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
-          <div className="flex gap-4 items-start">
-            <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
-              <Sparkles className="h-5 w-5 text-emerald-400" />
+      <main className="z-10 mx-auto w-full max-w-[1440px] flex-1 space-y-7 px-3 py-6 sm:px-7 sm:py-10">
+        <section className="grid border-b border-white/10 pb-7 lg:grid-cols-[1fr_420px] lg:items-end lg:gap-16 lg:pb-10">
+          <div>
+            <div className="mb-4 flex items-center gap-3">
+              <span className="editorial-kicker">Private journal / {now.getFullYear()}</span>
+              <span className="h-px w-10 bg-[#c7a76a]/40" />
+              <span className="font-mono text-[9px] uppercase tracking-[.16em] text-stone-600">{activeTab === 'calendar' ? 'Entry index' : 'Research summary'}</span>
             </div>
-            <div>
-              <h3 className="font-display font-bold text-sm text-zinc-200">
-                {currentUser.tradingPlan || 'Alchemist'} Intelligence Desk
-              </h3>
-              <p className="text-xs text-zinc-500 leading-relaxed mt-1">
-                {currentUser.bio || 'บันทึกกระบวนการ วัดผลด้วยข้อมูล และทบทวนการตัดสินใจอย่างเป็นระบบ'}
-              </p>
+            <h2 className="max-w-3xl font-display text-[clamp(2.7rem,7vw,6.2rem)] font-normal leading-[.82] tracking-[-.055em] text-[#efede7]">
+              Process is the <span className="italic text-[#c7a76a]">edge.</span>
+            </h2>
+          </div>
+          <div className="mt-7 border-l border-[#c7a76a]/35 pl-5 lg:mt-0">
+            <p className="editorial-kicker">{currentUser.tradingPlan || 'Alchemist'} methodology</p>
+            <p className="mt-3 max-w-md text-sm leading-6 text-stone-400">
+              {currentUser.bio || 'บันทึกสมมติฐาน ตรวจสอบกระบวนการ และปล่อยให้ข้อมูลเป็นผู้ตัดสินผลลัพธ์'}
+            </p>
+            <div className="mt-5 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[.1em] text-stone-600">
+              <Clock className="h-3 w-3 text-[#c7a76a]" />
+              Bangkok · {now.toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' })} · {now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}
             </div>
           </div>
-          <div className="flex items-center gap-2 shrink-0 bg-[#0A0A0C]/60 border border-white/5 px-3.5 py-1.5 rounded-xl text-[10px] font-mono text-zinc-400">
-            <Clock className="h-3.5 w-3.5 text-cyan-400" />
-            <span>
-              LOCAL TIME: {now.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' })} {now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-            </span>
-          </div>
-        </div>
+        </section>
 
         {/* Tab Sections */}
         <div>
@@ -173,11 +169,12 @@ export default function App() {
       </main>
 
       {/* Footer Branding */}
-      <footer className="border-t border-white/5 py-6 px-4 bg-[#0A0A0C] text-center text-[10px] font-mono text-zinc-600 uppercase tracking-wider">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© 2026 JournalTradeDaily V3 · Local-first research journal</p>
-          <div className="flex gap-4">
-            <span className="flex items-center gap-1 text-cyan-400"><Database className="h-3 w-3" /> Data stays on device</span>
+      <footer className="border-t border-white/10 px-4 py-7 font-mono text-[9px] uppercase tracking-[.16em] text-stone-600">
+        <div className="mx-auto flex max-w-[1440px] flex-col items-center justify-between gap-4 sm:flex-row">
+          <p>Journal Trade Daily · Edition 03 · 2026</p>
+          <div className="flex items-center gap-5">
+            <span>Designed for deliberate review</span>
+            <span className="flex items-center gap-1.5 text-[#bda778]"><Database className="h-3 w-3" /> Local archive</span>
           </div>
         </div>
       </footer>

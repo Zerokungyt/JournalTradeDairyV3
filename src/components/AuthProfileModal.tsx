@@ -106,14 +106,14 @@ export default function AuthProfileModal({
   const lastBackup = dbService.getLastBackupAt();
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md p-4 sm:p-8">
-      <div className="mx-auto max-w-3xl overflow-hidden rounded-3xl border border-cyan-400/20 bg-[#080d18] shadow-[0_30px_100px_rgba(0,0,0,.65)]">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 p-3 backdrop-blur-sm sm:p-8">
+      <div className="mx-auto max-w-3xl overflow-hidden border border-white/15 bg-[#11110f]">
         <div className="flex items-center justify-between border-b border-white/8 px-5 py-4 sm:px-7">
           <div>
-            <p className="text-[11px] font-mono uppercase tracking-[.2em] text-cyan-400">Local identity</p>
-            <h2 className="mt-1 text-xl font-bold text-white">Profile & Data Vault</h2>
+            <p className="editorial-kicker">Journal identity</p>
+            <h2 className="mt-2 font-display text-3xl font-normal tracking-[-.03em] text-white">Make the journal yours.</h2>
           </div>
-          <button onClick={onClose} aria-label="ปิด" className="rounded-xl border border-white/10 p-2 text-zinc-400 transition hover:bg-white/5 hover:text-white">
+          <button onClick={onClose} aria-label="ปิด" className="rounded-sm border border-white/10 p-2 text-zinc-400 transition hover:bg-white/5 hover:text-white">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -121,8 +121,8 @@ export default function AuthProfileModal({
         <div className="grid gap-0 md:grid-cols-[1.25fr_.75fr]">
           <form onSubmit={saveProfile} className="space-y-5 p-5 sm:p-7">
             <div className="flex items-center gap-4">
-              <button type="button" onClick={() => avatarInput.current?.click()} className="group relative h-24 w-24 shrink-0 overflow-hidden rounded-3xl border border-cyan-400/30 bg-gradient-to-br from-cyan-400/20 to-blue-700/30">
-                {avatar ? <img src={avatar} alt="รูปโปรไฟล์" className="h-full w-full object-cover" /> : <UserRound className="m-auto h-full w-9 text-cyan-300" />}
+              <button type="button" onClick={() => avatarInput.current?.click()} className="group relative h-24 w-24 shrink-0 overflow-hidden border border-[#c7a76a]/40 bg-[#0d0d0b]">
+                {avatar ? <img src={avatar} alt="รูปโปรไฟล์" className="h-full w-full object-cover" /> : <UserRound className="m-auto h-full w-9 text-amber-300" />}
                 <span className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1 bg-black/70 py-1.5 text-[10px] text-white opacity-0 transition group-hover:opacity-100"><ImagePlus className="h-3 w-3" /> เปลี่ยนรูป</span>
               </button>
               <div>
@@ -139,20 +139,20 @@ export default function AuthProfileModal({
               <label className="space-y-2 text-sm text-zinc-300 sm:col-span-2">ทุนเริ่มต้น (USD)<input type="number" min="0.01" step="0.01" value={capital} onChange={(e) => setCapital(e.target.value)} className="field font-mono" /></label>
             </div>
 
-            <button type="submit" className="flex w-full items-center justify-center gap-2 rounded-xl bg-cyan-300 px-4 py-3 font-bold text-slate-950 transition hover:bg-cyan-200">
+            <button type="submit" className="flex w-full items-center justify-center gap-2 border border-[#c7a76a] bg-[#c7a76a] px-4 py-3 text-sm font-medium text-stone-950 transition hover:bg-[#d9bc82]">
               <Check className="h-4 w-4" /> บันทึกโปรไฟล์
             </button>
           </form>
 
           <aside className="border-t border-white/8 bg-white/[.025] p-5 sm:p-7 md:border-l md:border-t-0">
-            <div className="flex items-center gap-2 text-zinc-100"><Database className="h-5 w-5 text-cyan-400" /><h3 className="font-semibold">Data Vault</h3></div>
+            <div className="flex items-center gap-2 text-zinc-100"><Database className="h-5 w-5 text-[#c7a76a]" /><h3 className="font-display text-xl font-normal">Personal archive</h3></div>
             <p className="mt-2 text-sm leading-relaxed text-zinc-400">ข้อมูลอยู่ในเครื่อง ควรดาวน์โหลดไฟล์สำรองเป็นประจำ โดยเฉพาะก่อนล้างข้อมูลเบราว์เซอร์</p>
             <div className="mt-5 space-y-3">
               <button type="button" onClick={exportBackup} className="vault-button"><Download className="h-4 w-4" /> Export backup</button>
               <button type="button" onClick={() => restoreInput.current?.click()} className="vault-button"><Upload className="h-4 w-4" /> Restore backup</button>
               <input ref={restoreInput} type="file" accept="application/json,.json" onChange={(e) => restoreBackup(e.target.files?.[0])} className="hidden" />
             </div>
-            <div className="mt-5 rounded-2xl border border-emerald-400/15 bg-emerald-400/5 p-4">
+            <div className="mt-5 border-l border-emerald-400/35 bg-emerald-400/[.03] p-4">
               <div className="flex items-center gap-2 text-xs font-semibold text-emerald-300"><ShieldCheck className="h-4 w-4" /> LOCAL-FIRST</div>
               <p className="mt-2 text-xs leading-relaxed text-zinc-400">ไม่มีบัญชี ไม่มีรหัสผ่าน และไม่มีข้อมูลถูกส่งไป Firebase</p>
             </div>
@@ -160,7 +160,7 @@ export default function AuthProfileModal({
           </aside>
         </div>
 
-        {message && <div className="border-t border-white/8 bg-cyan-400/5 px-6 py-3 text-center text-sm text-cyan-200">{message}</div>}
+        {message && <div className="border-t border-white/8 bg-amber-400/5 px-6 py-3 text-center text-sm text-amber-200">{message}</div>}
       </div>
     </div>
   );
