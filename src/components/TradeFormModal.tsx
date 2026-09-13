@@ -75,7 +75,7 @@ export default function TradeFormModal({
       setAmountInput('1000');
       setReason('');
       setEmotion('calm');
-      setImageUrl(CHART_PRESETS[0].url);
+      setImageUrl(CHART_PRESETS[0]?.url || '');
       setNotes('');
     }
   }, [activeTrade, selectedDate, isOpen]);

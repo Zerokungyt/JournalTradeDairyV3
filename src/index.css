@@ -51,3 +51,56 @@
   text-shadow: 0 0 12px rgba(226, 232, 240, 0.25);
 }
 
+html {
+  color-scheme: dark;
+  background: #050810;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(circle at 15% -10%, rgba(34, 211, 238, 0.08), transparent 30rem),
+    #050810;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+.field {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 0.75rem;
+  background: #050914;
+  padding: 0.7rem 0.8rem;
+  color: #f4f4f5;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.field:focus {
+  border-color: rgba(103, 232, 249, 0.55);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.08);
+}
+
+.vault-button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(103, 232, 249, 0.16);
+  border-radius: 0.75rem;
+  background: rgba(34, 211, 238, 0.05);
+  padding: 0.7rem 0.8rem;
+  color: #a5f3fc;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.vault-button:hover {
+  border-color: rgba(103, 232, 249, 0.32);
+  background: rgba(34, 211, 238, 0.1);
+}

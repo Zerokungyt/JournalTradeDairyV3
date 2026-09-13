@@ -71,6 +71,8 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
         totalPnL: 0,
         currentBalance,
         avgRRR: 0,
+        expectancy: 0,
+        maxDrawdown: 0,
       };
     }
 
@@ -89,6 +91,15 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
 
     const profitFactor = totalLossSum > 0 ? totalWinSum / totalLossSum : totalWinSum > 0 ? 999 : 0;
     const totalPnL = trades.reduce((sum, t) => sum + t.profitLoss, 0);
+    const expectancy = totalPnL / total;
+    let equity = user.startingCapital;
+    let peak = equity;
+    let maxDrawdown = 0;
+    [...trades].sort((a, b) => a.createdAt - b.createdAt).forEach((trade) => {
+      equity += trade.profitLoss;
+      peak = Math.max(peak, equity);
+      if (peak > 0) maxDrawdown = Math.max(maxDrawdown, ((peak - equity) / peak) * 100);
+    });
 
     // Calculate Average Risk Reward Ratio (TP / SL ratio)
     const avgRRR = trades.reduce((acc, t) => {
@@ -107,6 +118,8 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
       totalPnL,
       currentBalance,
       avgRRR,
+      expectancy,
+      maxDrawdown,
     };
   }, [trades, user.startingCapital, netCashflow]);
 
@@ -414,7 +427,7 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
       </div>
 
       {/* Grid of Quant Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         <div className="bg-[#0D1222]/80 p-4 rounded-xl border border-sky-500/10 text-center">
           <Percent className="h-5 w-5 text-sky-400 mx-auto mb-1.5" />
           <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Win Rate (อัตราการชนะ)</p>
@@ -443,6 +456,22 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
             {stats.profitFactor === 999 ? '∞' : stats.profitFactor.toFixed(2)}
           </p>
           <p className="text-[9px] text-zinc-400 mt-1">สัดส่วนความเสี่ยงรวมเทียบยอดชนะ</p>
+        </div>
+
+        <div className="bg-[#0D1222]/80 p-4 rounded-xl border border-sky-500/10 text-center">
+          <Coins className="h-5 w-5 text-emerald-400 mx-auto mb-1.5" />
+          <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Expectancy / Trade</p>
+          <p className={`text-xl font-bold mt-1 font-mono ${stats.expectancy >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+            {stats.expectancy >= 0 ? '+' : '-'}${Math.abs(stats.expectancy).toFixed(2)}
+          </p>
+          <p className="text-[9px] text-zinc-400 mt-1">ค่าเฉลี่ยผลลัพธ์ต่อหนึ่งรายการ</p>
+        </div>
+
+        <div className="bg-[#0D1222]/80 p-4 rounded-xl border border-sky-500/10 text-center">
+          <ShieldCheck className="h-5 w-5 text-amber-400 mx-auto mb-1.5" />
+          <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Max Drawdown</p>
+          <p className="text-xl font-bold text-amber-300 mt-1 font-mono">{stats.maxDrawdown.toFixed(2)}%</p>
+          <p className="text-[9px] text-zinc-400 mt-1">การลดลงสูงสุดจากจุดสูงสุด</p>
         </div>
       </div>
 

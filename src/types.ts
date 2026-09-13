@@ -1,10 +1,21 @@
 export interface UserProfile {
   uid: string;
-  email: string;
+  email?: string;
   displayName: string;
   photoURL: string;
+  tradingPlan?: string;
+  bio?: string;
   startingCapital: number;
   createdAt: string;
+}
+
+export interface JournalBackup {
+  app: 'JournalTradeDaily';
+  version: 3;
+  exportedAt: string;
+  profile: UserProfile;
+  trades: Trade[];
+  cashflows: CashflowRecord[];
 }
 
 export type CashflowType = 'deposit' | 'withdrawal';
