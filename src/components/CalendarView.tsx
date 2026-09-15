@@ -169,13 +169,13 @@ export default function CalendarView({
 
   return (
     <div id="calendar-section" className="space-y-6">
-      {/* 2-Column Responsive Layout: Calendar Grid (8 cols) and Daily Trade Menu (4 cols) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      {/* The detail rail stays narrow so the calendar remains the visual focus. */}
+      <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
         
         {/* Left Side: Calendar Grid */}
-        <div className="lg:col-span-8 space-y-6">
-          <div className="border border-white/10 bg-[#11110F] p-3 shadow-none sm:p-5">
-            <div className="mb-5 flex flex-col items-start justify-between gap-4 border-b border-white/10 pb-5 md:flex-row md:items-center">
+        <div className="min-w-0 space-y-6">
+          <div className="border border-white/10 bg-[#11110F] p-3 shadow-none sm:p-4">
+            <div className="mb-3 flex flex-col items-start justify-between gap-3 border-b border-white/10 pb-3 md:flex-row md:items-center">
               <div className="flex items-center gap-3">
                 <button
                   onClick={prevMonth}
@@ -196,11 +196,11 @@ export default function CalendarView({
 
               {/* High-Fidelity Mini Stats Panel */}
               <div className="grid w-full grid-cols-3 divide-x divide-white/10 border border-white/10 md:w-auto">
-                <div className="min-w-0 px-2 py-3 text-center md:min-w-[110px]">
+                <div className="min-w-0 px-2 py-2 text-center md:min-w-[100px]">
                   <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">เทรดในเดือน</p>
                   <p className="text-sm font-semibold text-zinc-200 mt-1">{monthStats.count} ครั้ง</p>
                 </div>
-                <div className="min-w-0 px-2 py-3 text-center md:min-w-[110px]">
+                <div className="min-w-0 px-2 py-2 text-center md:min-w-[100px]">
                   <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">
                     {monthStats.totalPnL >= 0 ? 'กำไรสุทธิ' : 'ขาดทุนสุทธิ'}
                   </p>
@@ -208,7 +208,7 @@ export default function CalendarView({
                     {monthStats.totalPnL >= 0 ? '+' : '-'}${Math.abs(monthStats.totalPnL).toLocaleString('en-US', { minimumFractionDigits: monthStats.totalPnL % 1 !== 0 ? 2 : 0, maximumFractionDigits: 2 })}
                   </p>
                 </div>
-                <div className="min-w-0 px-2 py-3 text-center md:min-w-[110px]">
+                <div className="min-w-0 px-2 py-2 text-center md:min-w-[100px]">
                   <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">อัตราการชนะ (Winrate)</p>
                   <p className="text-sm font-bold text-amber-400 mt-1">
                     {monthStats.winRate.toFixed(0)}%
@@ -218,11 +218,11 @@ export default function CalendarView({
             </div>
 
             {/* Days of week header */}
-            <div className="grid grid-cols-7 gap-2 mb-2">
+            <div className="mb-1 grid grid-cols-7 gap-px">
               {['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'].map((dayName, idx) => (
                 <div
                   key={idx}
-                  className={`text-center font-display text-xs font-semibold py-1.5 ${
+                  className={`py-1.5 text-center font-mono text-[10px] font-medium uppercase tracking-[.08em] ${
                     idx === 0 ? 'text-rose-400' : idx === 6 ? 'text-amber-400' : 'text-zinc-400'
                   }`}
                 >
@@ -232,13 +232,13 @@ export default function CalendarView({
             </div>
 
             {/* Calendar Grid */}
-            <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+            <div className="grid grid-cols-7 gap-px bg-white/[.07]">
               {calendarDays.map((cell, idx) => {
                 if (!cell) {
                   return (
                     <div
                       key={`empty-${idx}`}
-                      className="aspect-square bg-[#0D0D0B]/30 rounded-sm border border-transparent"
+                      className="min-h-[64px] bg-[#0a0a09]/70 sm:min-h-[78px] md:min-h-[86px]"
                     />
                   );
                 }
@@ -257,17 +257,17 @@ export default function CalendarView({
                   <div
                     key={cell.dateStr}
                     onClick={() => onSelectDate(cell.dateStr)}
-                    className={`group relative flex min-h-[72px] cursor-pointer flex-col justify-between overflow-hidden border p-1.5 transition-all duration-200 sm:min-h-[110px] sm:p-2.5 md:min-h-[130px] ${
+                    className={`group relative flex min-h-[64px] cursor-pointer flex-col overflow-hidden p-1.5 transition-colors duration-150 sm:min-h-[78px] sm:p-2 md:min-h-[86px] ${
                       isSelected
-                        ? 'border-[#c7a76a] bg-[#c7a76a]/10'
-                        : 'border-white/[.07] bg-[#0D0D0B]/60 hover:border-[#c7a76a]/35 hover:bg-[#151512]'
+                        ? 'bg-[#c7a76a]/10 ring-1 ring-inset ring-[#c7a76a]/70'
+                        : 'bg-[#0D0D0B] hover:bg-[#151512]'
                     }`}
                   >
                     {/* Header: Date number & Action Button */}
                     <div className="flex items-center justify-between">
                       <span className={`text-xs font-mono font-semibold ${
                         isSelected
-                          ? 'text-zinc-950 bg-amber-300 px-1.5 py-0.5 rounded font-bold'
+                          ? 'text-[#d9bc82] font-bold'
                           : cell.dateStr === '2026-07-21'
                           ? 'text-amber-300 bg-amber-500/25 px-1.5 py-0.5 rounded font-bold'
                           : 'text-zinc-400'
@@ -281,7 +281,7 @@ export default function CalendarView({
                           onSelectDate(cell.dateStr);
                           onAddTradeForDate(cell.dateStr);
                         }}
-                        className="opacity-0 group-hover:opacity-100 p-1 rounded-md bg-[#0D0D0B] hover:bg-amber-400 hover:text-zinc-950 text-zinc-400 transition-all duration-300 cursor-pointer"
+                          className="cursor-pointer p-1 text-zinc-600 opacity-40 transition hover:bg-amber-400 hover:text-zinc-950 sm:opacity-0 sm:group-hover:opacity-100"
                         title="เพิ่มบันทึกการเทรด"
                       >
                         <Plus className="h-3 w-3" />
@@ -289,44 +289,32 @@ export default function CalendarView({
                     </div>
 
                     {/* Day Trades Content without Image Thumbnails */}
-                    <div className="flex-1 mt-1 flex flex-col justify-end space-y-1">
+                    <div className="mt-auto min-w-0 pt-1">
                       {dayTrades.length > 0 ? (
-                        <div className="space-y-1.5 bg-[#0F0F0D]/90 p-1.5 sm:p-2 rounded-sm border border-amber-500/10">
-                          {/* Top Row: Trade Count Badge & Emotion Emoji */}
-                          <div className="flex items-center justify-between">
-                            <span className="text-[9px] sm:text-[10px] font-mono font-bold text-amber-300 bg-amber-500/20 border border-amber-500/30 px-1.5 py-0.5 rounded-md">
-                              {dayTrades.length} ไม้
-                            </span>
-                            <span className="text-xs" title={`อารมณ์: ${getEmotionThai(dayTrades[0].emotion)}`}>
-                              {getEmotionMarker(dayTrades[0].emotion)}
-                            </span>
-                          </div>
-
-                          {/* Net Profit / Loss Amount */}
-                          <div
-                            className={`w-full truncate border px-1 py-1 text-center font-mono text-[9px] font-medium tracking-tighter sm:text-xs sm:tracking-tight ${
-                              dayPnL >= 0 
-                                ? 'border-emerald-500/25 bg-emerald-950/25 text-emerald-400'
-                                : 'border-rose-500/25 bg-rose-950/25 text-rose-400'
-                            }`}
+                        <div className="flex min-w-0 items-end justify-between gap-1 border-t border-white/[.06] pt-1.5 font-mono">
+                          <span className="shrink-0 text-[8px] text-stone-500 sm:text-[9px]" title={`อารมณ์: ${getEmotionThai(dayTrades[0].emotion)}`}>
+                            {dayTrades.length}T · {getEmotionMarker(dayTrades[0].emotion)}
+                          </span>
+                          <span
+                            className={`min-w-0 truncate text-right text-[8px] font-medium sm:text-[10px] ${dayPnL >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}
                             title={`กำไร/ขาดทุนรวม: ${dayPnL >= 0 ? '+' : ''}$${dayPnL.toLocaleString()}`}
                           >
                             {formattedPnL}
-                          </div>
+                          </span>
                         </div>
                       ) : (
-                        // Empty state button
-                        <div
+                        <button
+                          type="button"
                           onClick={(e) => {
                             e.stopPropagation();
                             onSelectDate(cell.dateStr);
                             onAddTradeForDate(cell.dateStr);
                           }}
-                          className="group/plus flex h-7 cursor-pointer items-center justify-center border border-dashed border-white/10 transition-all hover:border-[#c7a76a]/50 hover:bg-[#c7a76a]/5 sm:h-12"
+                          className="ml-auto grid h-6 w-6 cursor-pointer place-items-center text-zinc-700 opacity-45 transition hover:bg-[#c7a76a]/10 hover:text-amber-400 sm:opacity-0 sm:group-hover:opacity-100"
                           title="คลิกเพื่อบันทึกไม้เทรดในวันนี้"
                         >
-                          <Plus className="h-4 w-4 text-zinc-600 group-hover/plus:text-amber-400 group-hover/plus:scale-110 transition-all" />
-                        </div>
+                          <Plus className="h-3.5 w-3.5" />
+                        </button>
                       )}
                     </div>
                   </div>
@@ -337,7 +325,7 @@ export default function CalendarView({
         </div>
 
         {/* Right Side: Daily Trade Menu & Manager */}
-        <div className="lg:col-span-4 bg-[#11110F] border border-amber-500/15 rounded-sm p-5 shadow-none flex flex-col space-y-4">
+        <div className="flex flex-col space-y-3 border border-amber-500/15 bg-[#11110F] p-4 shadow-none xl:sticky xl:top-28">
           <div className="flex items-center gap-2.5 border-b border-amber-500/10 pb-3">
             <div className="h-9 w-9 rounded-sm bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
               <Calendar className="h-5 w-5 text-amber-400" />
@@ -367,7 +355,7 @@ export default function CalendarView({
           {/* Trades list or empty state */}
           <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-transparent">
             {selectedDateTrades.length === 0 ? (
-              <div className="text-center py-10 border border-dashed border-amber-500/10 rounded-sm flex flex-col items-center justify-center gap-2.5">
+              <div className="flex flex-col items-center justify-center gap-2 border-t border-white/10 py-7 text-center">
                 <div className="h-10 w-10 rounded-full bg-[#0D0D0B] flex items-center justify-center text-zinc-500">
                   <Calendar className="h-5 w-5" />
                 </div>
