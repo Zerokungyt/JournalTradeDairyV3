@@ -18,6 +18,7 @@
 - Migrated legacy remote stock avatars to the neutral fallback while preserving locally uploaded images
 - Flattened the calendar into a compact editorial grid and reduced the daily detail rail on tablet and desktop
 - Restored the narrow daily rail at tablet widths and removed stretched height from the psychology card
+- Reordered calendar cells into date, centered P&L, and bottom trade/emotion metadata
 
 ## 3.0.0-foundation — 2026-09-13
 

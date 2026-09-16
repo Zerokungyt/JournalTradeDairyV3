@@ -289,17 +289,22 @@ export default function CalendarView({
                     </div>
 
                     {/* Day Trades Content without Image Thumbnails */}
-                    <div className="mt-auto min-w-0 pt-1">
+                    <div className="mt-1 flex min-h-0 flex-1 flex-col">
                       {dayTrades.length > 0 ? (
-                        <div className="flex min-w-0 items-end justify-between gap-1 border-t border-white/[.06] pt-1.5 font-mono">
-                          <span className="shrink-0 text-[8px] text-stone-500 sm:text-[9px]" title={`อารมณ์: ${getEmotionThai(dayTrades[0].emotion)}`}>
-                            {dayTrades.length}T · {getEmotionMarker(dayTrades[0].emotion)}
-                          </span>
+                        <div className="flex min-h-0 flex-1 flex-col font-mono">
+                          <div className="flex min-h-0 flex-1 items-center justify-center px-0.5">
+                            <span
+                              className={`max-w-full truncate text-center text-[9px] font-medium tracking-[-.03em] sm:text-xs lg:text-sm ${dayPnL >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}
+                              title={`กำไร/ขาดทุนรวม: ${dayPnL >= 0 ? '+' : ''}$${dayPnL.toLocaleString()}`}
+                            >
+                              {formattedPnL}
+                            </span>
+                          </div>
                           <span
-                            className={`min-w-0 truncate text-right text-[8px] font-medium sm:text-[10px] ${dayPnL >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}
-                            title={`กำไร/ขาดทุนรวม: ${dayPnL >= 0 ? '+' : ''}$${dayPnL.toLocaleString()}`}
+                            className="border-t border-white/[.06] pt-1 text-[8px] tracking-[.04em] text-stone-500 sm:text-[9px]"
+                            title={`จำนวน ${dayTrades.length} ไม้ · อารมณ์ ${getEmotionThai(dayTrades[0].emotion)}`}
                           >
-                            {formattedPnL}
+                            {dayTrades.length}T&nbsp;&nbsp;·&nbsp;&nbsp;{getEmotionMarker(dayTrades[0].emotion)}
                           </span>
                         </div>
                       ) : (
