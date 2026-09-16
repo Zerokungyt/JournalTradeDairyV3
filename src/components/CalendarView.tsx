@@ -170,7 +170,7 @@ export default function CalendarView({
   return (
     <div id="calendar-section" className="space-y-6">
       {/* The detail rail stays narrow so the calendar remains the visual focus. */}
-      <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
         
         {/* Left Side: Calendar Grid */}
         <div className="min-w-0 space-y-6">
@@ -325,7 +325,7 @@ export default function CalendarView({
         </div>
 
         {/* Right Side: Daily Trade Menu & Manager */}
-        <div className="flex flex-col space-y-3 border border-amber-500/15 bg-[#11110F] p-4 shadow-none xl:sticky xl:top-28">
+        <div className="flex flex-col space-y-3 border border-amber-500/15 bg-[#11110F] p-4 shadow-none lg:sticky lg:top-28">
           <div className="flex items-center gap-2.5 border-b border-amber-500/10 pb-3">
             <div className="h-9 w-9 rounded-sm bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
               <Calendar className="h-5 w-5 text-amber-400" />

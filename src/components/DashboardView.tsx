@@ -762,7 +762,7 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
       </div>
 
       {/* Bottom Grid: Technique Winrates + Emotions Analysis */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
         {/* Technique Winrates Table (Quant Analysis) */}
         <div className="bg-[#11110F] p-6 rounded-sm border border-amber-500/15 shadow-none lg:col-span-7">
           <div className="flex items-center gap-2 mb-4">
@@ -816,7 +816,7 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
         </div>
 
         {/* Emotion breakdown analysis */}
-        <div className="bg-[#11110F] p-6 rounded-sm border border-amber-500/15 shadow-none lg:col-span-5 flex flex-col justify-between">
+        <div className="self-start border border-amber-500/15 bg-[#11110F] p-5 shadow-none lg:col-span-5">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <Heart className="h-5 w-5 text-amber-400" />
@@ -825,14 +825,14 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
                 <p className="text-[10px] text-zinc-400 font-mono mt-0.5">ตรวจสอบอารมณ์ส่วนใหญ่ที่คุณเปิดไม้</p>
               </div>
             </div>
-            <p className="text-xs text-zinc-400 leading-relaxed mb-4">
+            <p className="mb-3 max-w-xl text-xs leading-relaxed text-zinc-400">
               นักลงทุนชั้นยอดจะมีระเบียบวินัยทางอารมณ์ ค้นพบว่าอารมณ์แบบไหนทำกำไรได้ดีที่สุดสำหรับพอร์ตของคุณ
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+          <div className="grid grid-cols-1 items-center gap-2 sm:grid-cols-[150px_minmax(0,1fr)]">
             {/* Pie Chart visual */}
-            <div className="h-44 w-full flex items-center justify-center">
+            <div className="flex h-36 w-full items-center justify-center">
               {emotionData.length === 0 ? (
                 <div className="text-zinc-500 text-xs font-mono">ไม่มีข้อมูล</div>
               ) : (
@@ -842,9 +842,9 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
                       data={emotionData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={45}
-                      outerRadius={65}
-                      paddingAngle={4}
+                      innerRadius={36}
+                      outerRadius={54}
+                      paddingAngle={3}
                       dataKey="value"
                     >
                       {emotionData.map((entry, index) => (

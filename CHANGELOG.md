@@ -17,6 +17,7 @@
 - Replaced the initial-letter fallback with a neutral social-style profile silhouette
 - Migrated legacy remote stock avatars to the neutral fallback while preserving locally uploaded images
 - Flattened the calendar into a compact editorial grid and reduced the daily detail rail on tablet and desktop
+- Restored the narrow daily rail at tablet widths and removed stretched height from the psychology card
 
 ## 3.0.0-foundation — 2026-09-13
 
