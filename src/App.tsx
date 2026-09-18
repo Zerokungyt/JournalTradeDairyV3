@@ -10,6 +10,10 @@ import { dbService } from './lib/db';
 import { Trade, UserProfile } from './types';
 import { getTradeOutcome, isDecidedOutcome } from './lib/tradeTaxonomy';
 import { Clock, Database } from 'lucide-react';
+import { NavigationPosition } from './components/NavigationSettings';
+
+const NAVIGATION_POSITION_KEY = 'jtd_navigation_position';
+const RAIL_COLLAPSED_KEY = 'jtd_rail_collapsed';
 
 
 export default function App() {
@@ -17,6 +21,15 @@ export default function App() {
   const [trades, setTrades] = useState<Trade[]>([]);
   const [cashflows, setCashflows] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<'calendar' | 'dashboard'>('calendar');
+  const [navigationPosition, setNavigationPosition] = useState<NavigationPosition>(() => {
+    const saved = localStorage.getItem(NAVIGATION_POSITION_KEY);
+    return saved === 'topbar' ? 'topbar' : 'sidebar';
+  });
+  const [railCollapsed, setRailCollapsed] = useState(() => {
+    const saved = localStorage.getItem(RAIL_COLLAPSED_KEY);
+    if (saved !== null) return saved === 'true';
+    return window.matchMedia('(min-width: 1024px) and (max-width: 1279px)').matches;
+  });
 
   // Modals state
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -37,6 +50,14 @@ export default function App() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem(NAVIGATION_POSITION_KEY, navigationPosition);
+  }, [navigationPosition]);
+
+  useEffect(() => {
+    localStorage.setItem(RAIL_COLLAPSED_KEY, String(railCollapsed));
+  }, [railCollapsed]);
 
   // Reload helpers
   const reloadData = (userId: string) => {
@@ -122,10 +143,20 @@ export default function App() {
         totalTrades={headerStats.count}
         overallWinRate={headerStats.winRate}
         netEquity={netEquity}
+        navigationPosition={navigationPosition}
+        railCollapsed={railCollapsed}
+        onNavigationPositionChange={setNavigationPosition}
+        onRailCollapsedChange={setRailCollapsed}
       />
 
-      <div className="z-10 mx-auto grid w-full max-w-[1600px] lg:grid-cols-[248px_minmax(0,1fr)] lg:gap-8 lg:px-6">
-        <DashboardRail
+      <div className={`z-10 mx-auto grid w-full max-w-[1600px] transition-[grid-template-columns,gap] duration-300 lg:px-6 ${
+        navigationPosition === 'sidebar'
+          ? railCollapsed
+            ? 'lg:grid-cols-[76px_minmax(0,1fr)] lg:gap-5'
+            : 'lg:grid-cols-[248px_minmax(0,1fr)] lg:gap-8'
+          : 'lg:grid-cols-1'
+      }`}>
+        {navigationPosition === 'sidebar' && <DashboardRail
           user={currentUser}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -134,7 +165,11 @@ export default function App() {
           totalTrades={headerStats.count}
           overallWinRate={headerStats.winRate}
           netEquity={netEquity}
-        />
+          collapsed={railCollapsed}
+          navigationPosition={navigationPosition}
+          onCollapsedChange={setRailCollapsed}
+          onNavigationPositionChange={setNavigationPosition}
+        />}
 
         <div className="min-w-0">
       {/* Main Container Content */}

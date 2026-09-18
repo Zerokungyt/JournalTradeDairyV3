@@ -1,5 +1,6 @@
 import { BarChart3, BookOpen, Settings2, UserRound, Wallet } from 'lucide-react';
 import { UserProfile } from '../types';
+import NavigationSettings, { NavigationPosition } from './NavigationSettings';
 
 interface HeaderProps {
   user: UserProfile;
@@ -10,14 +11,18 @@ interface HeaderProps {
   totalTrades: number;
   overallWinRate: number;
   netEquity?: number;
+  navigationPosition: NavigationPosition;
+  railCollapsed: boolean;
+  onNavigationPositionChange: (position: NavigationPosition) => void;
+  onRailCollapsedChange: (collapsed: boolean) => void;
 }
 
-export default function Header({ user, activeTab, setActiveTab, onOpenProfile, onOpenCashflow, totalTrades, overallWinRate, netEquity }: HeaderProps) {
+export default function Header({ user, activeTab, setActiveTab, onOpenProfile, onOpenCashflow, totalTrades, overallWinRate, netEquity, navigationPosition, railCollapsed, onNavigationPositionChange, onRailCollapsedChange }: HeaderProps) {
   const tabClass = (tab: 'calendar' | 'dashboard') => `relative flex flex-1 items-center justify-center gap-2 px-4 py-3 text-[11px] font-medium uppercase tracking-[.12em] transition md:flex-none ${activeTab === tab ? 'text-[#d9bc82] after:absolute after:inset-x-4 after:bottom-0 after:h-px after:bg-[#c7a76a]' : 'text-stone-500 hover:text-stone-200'}`;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0a0a09]/95 backdrop-blur-xl lg:hidden">
-      <div className="mx-auto flex max-w-[1440px] items-center justify-between px-4 py-3 sm:px-7">
+    <header className={`sticky top-0 z-40 border-b border-white/10 bg-[#0a0a09]/95 backdrop-blur-xl ${navigationPosition === 'sidebar' ? 'lg:hidden' : ''}`}>
+      <div className="mx-auto flex max-w-[1600px] items-center justify-between px-4 py-3 sm:px-7">
         <div className="flex min-w-0 items-center gap-3.5">
           <div className="flex shrink-0 items-baseline border-r border-[#c7a76a]/40 pr-3.5 text-[#d9bc82]" aria-label="JTD edition 03">
             <span className="text-lg font-semibold tracking-[-.08em]">JTD</span>
@@ -35,6 +40,15 @@ export default function Header({ user, activeTab, setActiveTab, onOpenProfile, o
           <span className="px-5 text-stone-500">EQUITY <b className="ml-2 font-medium text-emerald-300">${(netEquity ?? user.startingCapital).toLocaleString('en-US', { maximumFractionDigits: 2 })}</b></span>
         </div>
 
+        <div className="flex items-center gap-2.5">
+          <div className="hidden lg:block">
+            <NavigationSettings
+              position={navigationPosition}
+              collapsed={railCollapsed}
+              onPositionChange={onNavigationPositionChange}
+              onCollapsedChange={onRailCollapsedChange}
+            />
+          </div>
         <button onClick={onOpenProfile} className="group flex items-center gap-2.5 text-left">
           <span className="hidden sm:block"><b className="block max-w-32 truncate text-xs font-medium text-stone-200">{user.displayName}</b><small className="block max-w-32 truncate font-mono text-[8px] uppercase tracking-[.12em] text-stone-500">Private workspace</small></span>
           {user.photoURL ? (
@@ -46,10 +60,11 @@ export default function Header({ user, activeTab, setActiveTab, onOpenProfile, o
           )}
           <Settings2 className="h-3.5 w-3.5 text-stone-600 transition group-hover:text-[#c7a76a]" />
         </button>
+        </div>
       </div>
 
       <div className="border-t border-white/[.06]">
-        <div className="mx-auto flex max-w-[1440px] items-stretch justify-between px-2 sm:px-7">
+        <div className="mx-auto flex max-w-[1600px] items-stretch justify-between px-2 sm:px-7">
           <nav className="flex min-w-0 flex-1 items-center md:flex-none">
             <button onClick={() => setActiveTab('calendar')} className={tabClass('calendar')}><BookOpen className="h-3.5 w-3.5" /> Journal</button>
             <button onClick={() => setActiveTab('dashboard')} className={tabClass('dashboard')}><BarChart3 className="h-3.5 w-3.5" /> Analysis</button>

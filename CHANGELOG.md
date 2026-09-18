@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.3.0-adaptive-navigation — 2026-09-18
+
+### Added
+
+- Added a persistent navigation preference with desktop side-rail and top-bar layouts
+- Added an animated compact mode for the side rail to recover workspace width on tablets and narrower desktop screens
+
+### Changed
+
+- Preserved quick metrics, profile access, Journal, Analysis, and Capital Ledger controls in both desktop layouts
+- Defaulted first-time users on medium desktop/tablet widths to the compact rail while leaving mobile navigation unchanged
+
 ## 3.2.0-structured-journal — 2026-09-18
 
 ### Added

@@ -19,7 +19,7 @@ A local-first decision journal for reviewing trading process, performance, and p
 - Custom local profile, strategy identity, and avatar upload
 - Versioned JSON export and restore
 - Automatic migration from the V2.5 browser data model
-- Responsive mobile header and a persistent desktop workspace rail with profile, navigation, and account metrics
+- Adaptive navigation with a responsive mobile header, switchable sticky desktop top bar or side rail, and an animated compact rail for tablet-width screens
 
 ## Privacy model
 
