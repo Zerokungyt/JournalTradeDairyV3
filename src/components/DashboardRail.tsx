@@ -39,7 +39,7 @@ export default function DashboardRail({
     }`;
 
   return (
-    <aside className="sticky top-5 hidden h-[calc(100dvh-2.5rem)] max-h-[calc(100dvh-2.5rem)] min-h-0 flex-col overflow-hidden border border-white/10 bg-[#0d0d0b]/95 transition-[width] duration-300 lg:flex">
+    <aside className="sticky top-5 hidden h-[calc(100dvh-2.5rem)] max-h-[calc(100dvh-2.5rem)] min-h-0 flex-col overflow-visible border border-white/10 bg-[#0d0d0b]/95 transition-[width] duration-300 lg:flex">
       <div className={`shrink-0 border-b border-white/10 transition-all duration-300 ${collapsed ? 'px-2 py-4' : 'px-5 py-5'}`}>
         <div className={`flex items-center ${collapsed ? 'flex-col gap-3' : 'justify-between gap-3'}`}>
           <div className="flex items-baseline text-[#d9bc82]" aria-label="JTD edition 03">
