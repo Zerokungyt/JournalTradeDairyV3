@@ -11,6 +11,7 @@
 
 - Preserved quick metrics, profile access, Journal, Analysis, and Capital Ledger controls in both desktop layouts
 - Defaulted first-time users on medium desktop/tablet widths to the compact rail while leaving mobile navigation unchanged
+- Sized the sticky rail against the live browser viewport so profile controls remain visible before scrolling, including on tablets with expanded browser chrome
 
 ## 3.2.0-structured-journal — 2026-09-18
 
