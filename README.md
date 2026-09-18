@@ -12,13 +12,14 @@ A local-first decision journal for reviewing trading process, performance, and p
 ## Current capabilities
 
 - Calendar-based trade journal with screenshots and emotional context
-- Performance dashboard with win rate, profit factor, expectancy, and maximum drawdown
-- Setup and emotion breakdowns
+- Performance dashboard with outcome-aware win rate, achieved risk-reward ratio, expectancy, and maximum drawdown
+- Structured Alchemist entries with Price Key setups, direct/confirmed execution, optional confirmations, and research metrics
+- Setup and emotion breakdowns that keep BE and BE+ out of decided-trade win rate
 - Deposit and withdrawal records
 - Custom local profile, strategy identity, and avatar upload
 - Versioned JSON export and restore
 - Automatic migration from the V2.5 browser data model
-- Responsive layout for mobile and desktop
+- Responsive mobile header and a persistent desktop workspace rail with profile, navigation, and account metrics
 
 ## Privacy model
 
@@ -43,4 +44,3 @@ Every push to `main` is checked and deployed through GitHub Actions.
 ## Status
 
 V3 foundation is complete. Planned work includes stronger storage capacity for image-heavy journals, deeper process-quality metrics, accessibility review, and structured usability testing.
-

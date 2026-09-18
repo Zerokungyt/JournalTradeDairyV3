@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import Header from './components/Header';
+import DashboardRail from './components/DashboardRail';
 import CalendarView from './components/CalendarView';
 import DashboardView from './components/DashboardView';
 import TradeFormModal from './components/TradeFormModal';
@@ -7,6 +8,7 @@ import AuthProfileModal from './components/AuthProfileModal';
 import CashflowModal from './components/CashflowModal';
 import { dbService } from './lib/db';
 import { Trade, UserProfile } from './types';
+import { getTradeOutcome, isDecidedOutcome } from './lib/tradeTaxonomy';
 import { Clock, Database } from 'lucide-react';
 
 
@@ -93,10 +95,11 @@ export default function App() {
   const headerStats = useMemo(() => {
     const total = trades.length;
     if (total === 0) return { count: 0, winRate: 0 };
-    const wins = trades.filter((t) => t.profitLoss > 0).length;
+    const decidedTrades = trades.filter((trade) => isDecidedOutcome(getTradeOutcome(trade)));
+    const wins = decidedTrades.filter((trade) => getTradeOutcome(trade) === 'win').length;
     return {
       count: total,
-      winRate: (wins / total) * 100,
+      winRate: decidedTrades.length > 0 ? (wins / decidedTrades.length) * 100 : 0,
     };
   }, [trades]);
 
@@ -108,7 +111,7 @@ export default function App() {
   }, [currentUser, trades, cashflows]);
 
   return (
-    <div className="relative flex min-h-screen flex-col overflow-hidden bg-transparent font-sans text-stone-100 selection:bg-[#c7a76a] selection:text-stone-950">
+    <div className="relative min-h-screen bg-transparent font-sans text-stone-100 selection:bg-[#c7a76a] selection:text-stone-950">
       {/* Main App Header */}
       <Header
         user={currentUser}
@@ -121,8 +124,21 @@ export default function App() {
         netEquity={netEquity}
       />
 
+      <div className="z-10 mx-auto grid w-full max-w-[1600px] lg:grid-cols-[248px_minmax(0,1fr)] lg:gap-8 lg:px-6">
+        <DashboardRail
+          user={currentUser}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          onOpenProfile={() => setIsAuthModalOpen(true)}
+          onOpenCashflow={() => setIsCashflowModalOpen(true)}
+          totalTrades={headerStats.count}
+          overallWinRate={headerStats.winRate}
+          netEquity={netEquity}
+        />
+
+        <div className="min-w-0">
       {/* Main Container Content */}
-      <main className="z-10 mx-auto w-full max-w-[1440px] flex-1 space-y-7 px-3 py-6 sm:px-7 sm:py-10">
+      <main className="w-full space-y-7 px-3 py-6 sm:px-7 sm:py-10 lg:px-0">
         <section className="grid border-b border-white/10 pb-7 lg:grid-cols-[1fr_420px] lg:items-end lg:gap-16 lg:pb-10">
           <div>
             <div className="mb-4 flex items-center gap-3">
@@ -169,8 +185,8 @@ export default function App() {
       </main>
 
       {/* Footer Branding */}
-      <footer className="border-t border-white/10 px-4 py-7 font-mono text-[9px] uppercase tracking-[.16em] text-stone-600">
-        <div className="mx-auto flex max-w-[1440px] flex-col items-center justify-between gap-4 sm:flex-row">
+      <footer className="border-t border-white/10 px-4 py-7 font-mono text-[9px] uppercase tracking-[.16em] text-stone-600 lg:px-0">
+        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p>Journal Trade Daily · Edition 03 · 2026</p>
           <div className="flex items-center gap-5">
             <span>Designed for deliberate review</span>
@@ -178,6 +194,8 @@ export default function App() {
           </div>
         </div>
       </footer>
+        </div>
+      </div>
 
       {/* Modals Container */}
       {currentUser && (

@@ -12,6 +12,7 @@ import {
   PlusCircle
 } from 'lucide-react';
 import { Trade, TradeEmotion } from '../types';
+import { getTradeOutcome, getTradeSetup } from '../lib/tradeTaxonomy';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface CalendarViewProps {
@@ -108,9 +109,10 @@ export default function CalendarView({
     const monthlyTrades = trades.filter((t) => t.date.startsWith(monthPrefix));
 
     const totalPnL = monthlyTrades.reduce((sum, t) => sum + t.profitLoss, 0);
-    const winTrades = monthlyTrades.filter((t) => t.profitLoss > 0).length;
-    const lossTrades = monthlyTrades.filter((t) => t.profitLoss < 0).length;
-    const winRate = monthlyTrades.length > 0 ? (winTrades / monthlyTrades.length) * 100 : 0;
+    const winTrades = monthlyTrades.filter((trade) => getTradeOutcome(trade) === 'win').length;
+    const lossTrades = monthlyTrades.filter((trade) => getTradeOutcome(trade) === 'loss').length;
+    const decidedTrades = winTrades + lossTrades;
+    const winRate = decidedTrades > 0 ? (winTrades / decidedTrades) * 100 : 0;
 
     return {
       totalPnL,
@@ -387,8 +389,8 @@ export default function CalendarView({
                       <span className="text-[9px] font-mono text-amber-300 bg-amber-500/15 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider">
                         ไม้ที่ {selectedDateTrades.length - idx}
                       </span>
-                      <h4 className="font-semibold text-xs text-zinc-200 mt-1.5 truncate max-w-[160px]" title={trade.technique}>
-                        {trade.technique}
+                      <h4 className="font-semibold text-xs text-zinc-200 mt-1.5 truncate max-w-[160px]" title={getTradeSetup(trade)}>
+                        {getTradeSetup(trade)}
                       </h4>
                     </div>
                     <span className={`text-xs font-mono font-bold ${trade.profitLoss >= 0 ? 'text-amber-400' : 'text-rose-400'}`}>
@@ -508,7 +510,7 @@ export default function CalendarView({
                   {trade.imageUrl && (
                     <img
                       src={trade.imageUrl}
-                      alt={trade.technique}
+                      alt={getTradeSetup(trade)}
                       className="h-16 w-16 rounded-sm object-cover bg-[#0D0D0B] border border-amber-500/10"
                       referrerPolicy="no-referrer"
                     />
@@ -520,7 +522,7 @@ export default function CalendarView({
                         {trade.profitLoss >= 0 ? '+' : ''}${trade.profitLoss.toLocaleString()}
                       </span>
                     </div>
-                    <p className="text-sm font-semibold text-zinc-200 truncate mt-1">{trade.technique}</p>
+                    <p className="text-sm font-semibold text-zinc-200 truncate mt-1">{getTradeSetup(trade)}</p>
                     <p className="text-xs text-zinc-400 line-clamp-1 mt-1">{trade.reason}</p>
                     <div className="flex items-center gap-2 mt-2">
                       <span className="text-[10px] bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded font-mono">

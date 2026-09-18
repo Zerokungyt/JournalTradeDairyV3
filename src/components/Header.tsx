@@ -16,7 +16,7 @@ export default function Header({ user, activeTab, setActiveTab, onOpenProfile, o
   const tabClass = (tab: 'calendar' | 'dashboard') => `relative flex flex-1 items-center justify-center gap-2 px-4 py-3 text-[11px] font-medium uppercase tracking-[.12em] transition md:flex-none ${activeTab === tab ? 'text-[#d9bc82] after:absolute after:inset-x-4 after:bottom-0 after:h-px after:bg-[#c7a76a]' : 'text-stone-500 hover:text-stone-200'}`;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0a0a09]/95 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0a0a09]/95 backdrop-blur-xl lg:hidden">
       <div className="mx-auto flex max-w-[1440px] items-center justify-between px-4 py-3 sm:px-7">
         <div className="flex min-w-0 items-center gap-3.5">
           <div className="flex shrink-0 items-baseline border-r border-[#c7a76a]/40 pr-3.5 text-[#d9bc82]" aria-label="JTD edition 03">

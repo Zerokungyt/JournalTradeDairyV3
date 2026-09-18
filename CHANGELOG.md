@@ -1,5 +1,29 @@
 # Changelog
 
+## 3.2.0-structured-journal — 2026-09-18
+
+### Added
+
+- Added a persistent desktop workspace rail for Journal, Analysis, Capital Ledger, account metrics, and profile access
+- Added first-class trade fields for Price Key setup, direction, key timeframe, entry style, outcome, exit type, confirmations, Realized R, MFE, and MAE
+- Added Alchemist setup presets including Classic A, Classic V, SBR, RBS, OCL, FIRE, ICT Order Blocks, QM, and Fibonacci workflows
+- Added independent WIN, LOSS, BE, and BE+ outcomes
+- Added an expandable Advanced Research section so optional confirmation data does not slow down direct entries
+
+### Changed
+
+- Rebuilt the trade form around Entry Model, Plan & Outcome, and Review instead of one generic technique field
+- Treated Classic A/V and other Price Keys as complete entry setups; CISD-style structure evidence, PA, Engulfing, SMT, QT, and liquidity evidence remain optional confirmations
+- Updated win-rate calculations to use only decided WIN and LOSS outcomes while retaining BE/BE+ P&L in balance and equity calculations
+- Updated setup analytics and calendar records to use the structured setup label
+- Preserved legacy records by migrating the old technique value into the new setup field with safe defaults
+- Kept the mobile header compact while moving the complete identity workspace into the desktop rail
+
+### Verification
+
+- TypeScript type-check: pass
+- Vite production build: pass
+
 ## 3.1.0-editorial — 2026-09-13
 
 ### Design direction

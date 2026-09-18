@@ -11,7 +11,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { Trade, TradeEmotion, UserProfile, CashflowRecord } from '../types';
-import { DEFAULT_TECHNIQUES } from '../lib/db';
+import { getTradeOutcome, getTradeSetup } from '../lib/tradeTaxonomy';
 import {
   ResponsiveContainer,
   AreaChart,
@@ -73,12 +73,13 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
       };
     }
 
-    const winsList = trades.filter((t) => t.profitLoss > 0);
-    const lossesList = trades.filter((t) => t.profitLoss < 0);
+    const winsList = trades.filter((trade) => getTradeOutcome(trade) === 'win');
+    const lossesList = trades.filter((trade) => getTradeOutcome(trade) === 'loss');
 
     const winsCount = winsList.length;
     const lossesCount = lossesList.length;
-    const winRate = (winsCount / total) * 100;
+    const decidedCount = winsCount + lossesCount;
+    const winRate = decidedCount > 0 ? (winsCount / decidedCount) * 100 : 0;
 
     const totalWinSum = winsList.reduce((sum, t) => sum + t.profitLoss, 0);
     const totalLossSum = Math.abs(lossesList.reduce((sum, t) => sum + t.profitLoss, 0));
@@ -127,20 +128,19 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
     const map: Record<string, { wins: number; losses: number; count: number; totalPnL: number }> = {};
 
     trades.forEach((trade) => {
-      if (!map[trade.technique]) {
-        map[trade.technique] = { wins: 0, losses: 0, count: 0, totalPnL: 0 };
+      const setup = getTradeSetup(trade);
+      if (!map[setup]) {
+        map[setup] = { wins: 0, losses: 0, count: 0, totalPnL: 0 };
       }
-      map[trade.technique].count += 1;
-      map[trade.technique].totalPnL += trade.profitLoss;
-      if (trade.profitLoss > 0) {
-        map[trade.technique].wins += 1;
-      } else {
-        map[trade.technique].losses += 1;
-      }
+      map[setup].count += 1;
+      map[setup].totalPnL += trade.profitLoss;
+      if (getTradeOutcome(trade) === 'win') map[setup].wins += 1;
+      if (getTradeOutcome(trade) === 'loss') map[setup].losses += 1;
     });
 
     return Object.entries(map).map(([name, item]) => {
-      const winRate = item.count > 0 ? (item.wins / item.count) * 100 : 0;
+      const decidedCount = item.wins + item.losses;
+      const winRate = decidedCount > 0 ? (item.wins / decidedCount) * 100 : 0;
       return {
         name,
         count: item.count,
@@ -438,7 +438,7 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
           <span className="font-mono text-[9px] tracking-[.14em] text-[#c7a76a]">01</span>
           <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Win Rate (อัตราการชนะ)</p>
           <p className="text-xl font-bold text-zinc-100 mt-1 font-mono">{stats.winRate.toFixed(1)}%</p>
-          <p className="text-[9px] text-zinc-400 mt-1">ชนะ {stats.wins} จาก {stats.total} ครั้ง</p>
+          <p className="text-[9px] text-zinc-400 mt-1">ชนะ {stats.wins} · แพ้ {stats.losses} · ไม่นับ BE/BE+</p>
         </div>
 
         <div className="min-h-[126px] bg-[#11110F] p-4 text-left">

@@ -1,13 +1,8 @@
 import { CashflowRecord, JournalBackup, Trade, UserProfile } from '../types';
+import { ENTRY_SETUPS, getTradeOutcome, getTradeSetup } from './tradeTaxonomy';
 
 export const DEFAULT_TECHNIQUES = [
-  'ICT / Market Structure',
-  'MSNR',
-  'SMC / Order Block',
-  'SMT Divergence',
-  'Quant Signal',
-  'CIC Setup',
-  'อื่น ๆ',
+  ...ENTRY_SETUPS,
 ];
 
 export const CHART_PRESETS: { name: string; url: string }[] = [];
@@ -79,6 +74,22 @@ function normalizeOwner<T extends { userId: string }>(records: T[]): T[] {
   return records.map((record) => ({ ...record, userId: 'local_owner' }));
 }
 
+function normalizeTrade(trade: Trade): Trade {
+  const setup = getTradeSetup(trade);
+  return {
+    ...trade,
+    userId: 'local_owner',
+    technique: setup,
+    setup,
+    direction: trade.direction || 'buy',
+    timeframe: trade.timeframe || 'M15',
+    entryStyle: trade.entryStyle || 'direct',
+    confirmations: Array.isArray(trade.confirmations) ? trade.confirmations : [],
+    outcome: getTradeOutcome(trade),
+    exitType: trade.exitType || '',
+  };
+}
+
 export const dbService = {
   getCurrentUser(): UserProfile {
     return migrateProfile();
@@ -107,7 +118,7 @@ export const dbService = {
   },
 
   getTrades(_userId = 'local_owner'): Trade[] {
-    const trades = normalizeOwner(readArray<Trade>(TRADES_KEY));
+    const trades = normalizeOwner(readArray<Trade>(TRADES_KEY)).map(normalizeTrade);
     write(TRADES_KEY, trades);
     return trades.sort((a, b) => b.createdAt - a.createdAt);
   },
@@ -116,7 +127,7 @@ export const dbService = {
     const trades = this.getTrades();
     const existing = tradeData.id ? trades.find((trade) => trade.id === tradeData.id) : undefined;
     const result: Trade = {
-      ...tradeData,
+      ...normalizeTrade(tradeData as Trade),
       userId: 'local_owner',
       id: tradeData.id || crypto.randomUUID(),
       createdAt: existing?.createdAt || Date.now(),
@@ -178,7 +189,7 @@ export const dbService = {
       ...backup,
       version: 3,
       profile: { ...DEFAULT_PROFILE, ...backup.profile, uid: 'local_owner', email: undefined },
-      trades: normalizeOwner(backup.trades),
+      trades: normalizeOwner(backup.trades).map(normalizeTrade),
       cashflows: normalizeOwner(backup.cashflows),
     };
     write(PROFILE_KEY, normalized.profile);

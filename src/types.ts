@@ -31,12 +31,25 @@ export interface CashflowRecord {
 }
 
 export type TradeEmotion = 'fear' | 'overconfident' | 'calm' | 'greedy' | 'patient' | 'other';
+export type TradeOutcome = 'win' | 'loss' | 'breakeven' | 'breakeven_plus';
+export type TradeDirection = 'buy' | 'sell';
+export type TradeEntryStyle = 'direct' | 'confirmed';
 
 export interface Trade {
   id: string;
   userId: string;
   date: string; // YYYY-MM-DD
   technique: string;
+  setup?: string;
+  direction?: TradeDirection;
+  timeframe?: string;
+  entryStyle?: TradeEntryStyle;
+  confirmations?: string[];
+  outcome?: TradeOutcome;
+  exitType?: string;
+  realizedR?: number;
+  mfe?: number;
+  mae?: number;
   tp: number;
   sl: number;
   profitLoss: number; // Positive for profit, negative for loss
