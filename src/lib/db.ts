@@ -1,8 +1,8 @@
 import { CashflowRecord, JournalBackup, Trade, UserProfile } from '../types';
-import { ENTRY_SETUPS, getTradeOutcome, getTradeSetup } from './tradeTaxonomy';
+import { TRADE_TECHNIQUES, getTradeOutcome, getTradePriceKey, getTradeTechnique } from './tradeTaxonomy';
 
 export const DEFAULT_TECHNIQUES = [
-  ...ENTRY_SETUPS,
+  ...TRADE_TECHNIQUES,
 ];
 
 export const CHART_PRESETS: { name: string; url: string }[] = [];
@@ -75,11 +75,13 @@ function normalizeOwner<T extends { userId: string }>(records: T[]): T[] {
 }
 
 function normalizeTrade(trade: Trade): Trade {
-  const setup = getTradeSetup(trade);
+  const technique = getTradeTechnique(trade);
+  const setup = getTradePriceKey(trade);
   return {
     ...trade,
     userId: 'local_owner',
-    technique: setup,
+    technique,
+    strategy: technique,
     setup,
     direction: trade.direction || 'buy',
     timeframe: trade.timeframe || 'M15',

@@ -1,5 +1,25 @@
 # Changelog
 
+## 3.4.0-technique-archive — 2026-09-19
+
+### Added
+
+- Added a Technique-first trade structure for FIRE, ALCHEMIST, ICT, SMC, SMT, MSNR, and custom systems
+- Added Technique-specific Price Key choices while retaining custom Price Keys for research workflows
+- Added an interactive technique archive in Analysis: Technique → Price Key statistics → compact chart-backed trade history → full trade record
+
+### Changed
+
+- Separated the high-level trading system from the Price Key used for entry across forms, detail views, calendar cards, and analytics
+- Reduced edit actions to one clear control in the full trade record; calendar cards now open details instead of presenting another edit action
+- Migrated existing browser records conservatively and marked ambiguous legacy entries as unclassified instead of inventing a Price Key
+- Classified legacy Classic A, Classic V, SBR, and RBS records under MSNR while preserving their original Price Key labels
+
+### Verification
+
+- TypeScript type-check: pass
+- Vite production build: pass
+
 ## 3.3.0-adaptive-navigation — 2026-09-18
 
 ### Added

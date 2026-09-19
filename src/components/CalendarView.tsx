@@ -8,11 +8,10 @@ import {
   AlertCircle,
   Calendar,
   Trash2,
-  Edit3,
   PlusCircle
 } from 'lucide-react';
 import { Trade, TradeEmotion } from '../types';
-import { getTradeOutcome, getTradeSetup } from '../lib/tradeTaxonomy';
+import { getTradeOutcome, getTradePriceKey, getTradeTechnique } from '../lib/tradeTaxonomy';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface CalendarViewProps {
@@ -389,9 +388,10 @@ export default function CalendarView({
                       <span className="text-[9px] font-mono text-amber-300 bg-amber-500/15 px-2 py-0.5 rounded-md font-bold uppercase tracking-wider">
                         ไม้ที่ {selectedDateTrades.length - idx}
                       </span>
-                      <h4 className="font-semibold text-xs text-zinc-200 mt-1.5 truncate max-w-[160px]" title={getTradeSetup(trade)}>
-                        {getTradeSetup(trade)}
+                      <h4 className="font-semibold text-xs text-zinc-200 mt-1.5 truncate max-w-[160px]" title={`${getTradeTechnique(trade)} · ${getTradePriceKey(trade)}`}>
+                        {getTradeTechnique(trade)}
                       </h4>
+                      <p className="mt-0.5 max-w-[160px] truncate font-mono text-[9px] text-zinc-500">{getTradePriceKey(trade)}</p>
                     </div>
                     <span className={`text-xs font-mono font-bold ${trade.profitLoss >= 0 ? 'text-amber-400' : 'text-rose-400'}`}>
                       {trade.profitLoss >= 0 ? '+' : ''}${trade.profitLoss.toLocaleString()}
@@ -425,7 +425,7 @@ export default function CalendarView({
                       onClick={() => onViewTrade(trade)}
                       className="px-2.5 py-1 bg-[#171713] hover:bg-[#22221D] text-zinc-300 hover:text-amber-300 rounded-md text-[10px] transition-all flex items-center gap-1 cursor-pointer"
                     >
-                      <Edit3 className="h-3 w-3 text-amber-400" /> แก้ไขไม้
+                      <Eye className="h-3 w-3 text-amber-400" /> ดูรายละเอียด
                     </button>
                     {deletingTradeId === trade.id ? (
                       <div className="flex items-center gap-1 bg-rose-950/70 border border-rose-500/40 px-2 py-0.5 rounded-md">
@@ -510,7 +510,7 @@ export default function CalendarView({
                   {trade.imageUrl && (
                     <img
                       src={trade.imageUrl}
-                      alt={getTradeSetup(trade)}
+                      alt={`${getTradeTechnique(trade)} · ${getTradePriceKey(trade)}`}
                       className="h-16 w-16 rounded-sm object-cover bg-[#0D0D0B] border border-amber-500/10"
                       referrerPolicy="no-referrer"
                     />
@@ -522,7 +522,8 @@ export default function CalendarView({
                         {trade.profitLoss >= 0 ? '+' : ''}${trade.profitLoss.toLocaleString()}
                       </span>
                     </div>
-                    <p className="text-sm font-semibold text-zinc-200 truncate mt-1">{getTradeSetup(trade)}</p>
+                    <p className="text-sm font-semibold text-zinc-200 truncate mt-1">{getTradeTechnique(trade)}</p>
+                    <p className="mt-0.5 truncate font-mono text-[9px] uppercase tracking-wide text-zinc-500">{getTradePriceKey(trade)}</p>
                     <p className="text-xs text-zinc-400 line-clamp-1 mt-1">{trade.reason}</p>
                     <div className="flex items-center gap-2 mt-2">
                       <span className="text-[10px] bg-zinc-800 text-zinc-300 px-1.5 py-0.5 rounded font-mono">

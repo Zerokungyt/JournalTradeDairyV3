@@ -214,6 +214,7 @@ export default function App() {
               trades={trades}
               cashflows={cashflows}
               onUpdateCapital={handleUpdateCapital}
+              onViewTrade={handleViewTrade}
             />
           )}
         </div>

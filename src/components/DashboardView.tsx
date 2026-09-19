@@ -8,10 +8,12 @@ import {
   Check,
   ChevronRight,
   Coins,
+  Image as ImageIcon,
+  Layers3,
   ShieldCheck,
 } from 'lucide-react';
 import { Trade, TradeEmotion, UserProfile, CashflowRecord } from '../types';
-import { getTradeOutcome, getTradeSetup } from '../lib/tradeTaxonomy';
+import { OUTCOME_LABELS, getTradeOutcome, getTradePriceKey, getTradeTechnique } from '../lib/tradeTaxonomy';
 import {
   ResponsiveContainer,
   AreaChart,
@@ -31,11 +33,14 @@ interface DashboardViewProps {
   trades: Trade[];
   cashflows?: CashflowRecord[];
   onUpdateCapital: (capital: number) => void;
+  onViewTrade: (trade: Trade) => void;
 }
 
-export default function DashboardView({ user, trades, cashflows = [], onUpdateCapital }: DashboardViewProps) {
+export default function DashboardView({ user, trades, cashflows = [], onUpdateCapital, onViewTrade }: DashboardViewProps) {
   const [capitalInput, setCapitalInput] = useState(user.startingCapital.toString());
   const [isSaved, setIsSaved] = useState(false);
+  const [selectedTechnique, setSelectedTechnique] = useState<string | null>(null);
+  const [selectedPriceKey, setSelectedPriceKey] = useState<string | null>(null);
 
   const handleSaveCapital = (e: React.FormEvent) => {
     e.preventDefault();
@@ -128,14 +133,14 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
     const map: Record<string, { wins: number; losses: number; count: number; totalPnL: number }> = {};
 
     trades.forEach((trade) => {
-      const setup = getTradeSetup(trade);
-      if (!map[setup]) {
-        map[setup] = { wins: 0, losses: 0, count: 0, totalPnL: 0 };
+      const technique = getTradeTechnique(trade);
+      if (!map[technique]) {
+        map[technique] = { wins: 0, losses: 0, count: 0, totalPnL: 0 };
       }
-      map[setup].count += 1;
-      map[setup].totalPnL += trade.profitLoss;
-      if (getTradeOutcome(trade) === 'win') map[setup].wins += 1;
-      if (getTradeOutcome(trade) === 'loss') map[setup].losses += 1;
+      map[technique].count += 1;
+      map[technique].totalPnL += trade.profitLoss;
+      if (getTradeOutcome(trade) === 'win') map[technique].wins += 1;
+      if (getTradeOutcome(trade) === 'loss') map[technique].losses += 1;
     });
 
     return Object.entries(map).map(([name, item]) => {
@@ -354,6 +359,35 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
   }, [trades, user.startingCapital]);
 
   const [selectedHistoryMonth, setSelectedHistoryMonth] = useState<string | null>(null);
+
+  const priceKeyStats = useMemo(() => {
+    if (!selectedTechnique) return [];
+    const map: Record<string, { wins: number; losses: number; count: number; totalPnL: number }> = {};
+    trades.filter((trade) => getTradeTechnique(trade) === selectedTechnique).forEach((trade) => {
+      const priceKey = getTradePriceKey(trade);
+      if (!map[priceKey]) map[priceKey] = { wins: 0, losses: 0, count: 0, totalPnL: 0 };
+      map[priceKey].count += 1;
+      map[priceKey].totalPnL += trade.profitLoss;
+      if (getTradeOutcome(trade) === 'win') map[priceKey].wins += 1;
+      if (getTradeOutcome(trade) === 'loss') map[priceKey].losses += 1;
+    });
+    return Object.entries(map).map(([name, item]) => {
+      const decided = item.wins + item.losses;
+      return { ...item, name, winRate: decided > 0 ? (item.wins / decided) * 100 : 0 };
+    }).sort((a, b) => b.count - a.count || b.winRate - a.winRate);
+  }, [selectedTechnique, trades]);
+
+  const selectedPriceKeyTrades = useMemo(() => {
+    if (!selectedTechnique || !selectedPriceKey) return [];
+    return trades
+      .filter((trade) => getTradeTechnique(trade) === selectedTechnique && getTradePriceKey(trade) === selectedPriceKey)
+      .sort((a, b) => b.createdAt - a.createdAt);
+  }, [selectedPriceKey, selectedTechnique, trades]);
+
+  const chooseTechnique = (technique: string) => {
+    setSelectedTechnique(technique);
+    setSelectedPriceKey(null);
+  };
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -761,62 +795,86 @@ export default function DashboardView({ user, trades, cashflows = [], onUpdateCa
         </div>
       </div>
 
-      {/* Bottom Grid: Technique Winrates + Emotions Analysis */}
-      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
-        {/* Technique Winrates Table (Quant Analysis) */}
-        <div className="bg-[#11110F] p-6 rounded-sm border border-amber-500/15 shadow-none lg:col-span-7">
-          <div className="flex items-center gap-2 mb-4">
-            <Award className="h-5 w-5 text-amber-400" />
-            <div>
-              <h3 className="font-display font-bold text-sm text-zinc-200">วินเรทแยกตามเทคนิคที่ใช้ (Technique Performance)</h3>
-              <p className="text-[10px] text-zinc-400 font-mono mt-0.5">วัดผลว่าสัญญากลยุทธ์ไหนสร้างกำไรสูงสุด</p>
+      {/* Technique → Price Key → trade history explorer */}
+      <div className="space-y-6">
+        <section className="border border-amber-500/15 bg-[#11110F] p-5 shadow-none sm:p-6">
+          <div className="flex flex-col justify-between gap-3 border-b border-white/10 pb-4 sm:flex-row sm:items-end">
+            <div className="flex items-start gap-3">
+              <Layers3 className="mt-0.5 h-5 w-5 text-amber-400" />
+              <div>
+                <p className="font-mono text-[9px] uppercase tracking-[.16em] text-[#c7a76a]">Technique archive</p>
+                <h3 className="mt-1 font-display text-xl font-normal text-zinc-100">ศูนย์รวมประวัติเทคนิค</h3>
+                <p className="mt-1 text-xs text-zinc-500">เลือก Technique → Price Key → ไม้เทรด เพื่อดูหลักฐานภาพและรายละเอียดเต็ม</p>
+              </div>
             </div>
+            {(selectedTechnique || selectedPriceKey) && (
+              <button type="button" onClick={() => { setSelectedTechnique(null); setSelectedPriceKey(null); }} className="self-start border border-white/10 px-3 py-2 font-mono text-[9px] uppercase tracking-wider text-zinc-400 transition hover:border-[#c7a76a]/50 hover:text-[#d9bc82]">กลับหน้ารวม</button>
+            )}
           </div>
 
           {techniqueStats.length === 0 ? (
-            <div className="py-12 text-center text-zinc-500 text-xs font-mono">
-              ยังไม่มีข้อมูลแยกประเภทเทคนิค กรุณาบันทึกไม้เทรดเพื่อทำการแยกสถิติ
-            </div>
+            <div className="py-12 text-center text-xs text-zinc-500">ยังไม่มีข้อมูลเทคนิค บันทึกไม้แรกเพื่อเริ่มสร้างสถิติ</div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse text-xs">
-                <thead>
-                  <tr className="border-b border-amber-500/10 text-zinc-400 font-mono">
-                    <th className="py-3 px-2">ชื่อเทคนิคการเทรด</th>
-                    <th className="py-3 px-2 text-center">จำนวนครั้ง</th>
-                    <th className="py-3 px-2 text-center">ชนะ-แพ้</th>
-                    <th className="py-3 px-2 text-right">วินเรท (Winrate)</th>
-                    <th className="py-3 px-2 text-right">กำไรรวม (USD)</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-amber-500/10 font-sans">
-                  {techniqueStats.map((tech) => (
-                    <tr key={tech.name} className="hover:bg-[#0D0D0B]/50 transition-colors">
-                      <td className="py-3.5 px-2 font-semibold text-zinc-200">{tech.name}</td>
-                      <td className="py-3.5 px-2 text-center font-mono text-zinc-400">{tech.count}</td>
-                      <td className="py-3.5 px-2 text-center font-mono">
-                        <span className="text-amber-400 font-semibold">{tech.wins}</span>
-                        <span className="text-zinc-600 mx-1">/</span>
-                        <span className="text-rose-400 font-semibold">{tech.losses}</span>
-                      </td>
-                      <td className="py-3.5 px-2 text-right">
-                        <span className={`font-bold font-mono ${tech.winRate >= 60 ? 'text-amber-400' : tech.winRate >= 40 ? 'text-amber-300' : 'text-rose-400'}`}>
-                          {tech.winRate.toFixed(0)}%
-                        </span>
-                      </td>
-                      <td className={`py-3.5 px-2 text-right font-mono font-bold ${tech.totalPnL >= 0 ? 'text-amber-400' : 'text-rose-400'}`}>
-                        {tech.totalPnL >= 0 ? '+' : ''}${tech.totalPnL.toLocaleString()}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="mt-5 space-y-6">
+              <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                {techniqueStats.map((tech, index) => (
+                  <button key={tech.name} type="button" onClick={() => chooseTechnique(tech.name)} className={`group border p-4 text-left transition ${selectedTechnique === tech.name ? 'border-[#c7a76a] bg-[#c7a76a]/[.07]' : 'border-white/10 bg-[#0d0d0b] hover:border-white/25'}`}>
+                    <div className="flex items-start justify-between gap-4">
+                      <div><span className="font-mono text-[8px] text-zinc-600">{String(index + 1).padStart(2, '0')}</span><h4 className="mt-1 text-sm font-semibold text-zinc-100">{tech.name}</h4></div>
+                      <ChevronRight className="h-4 w-4 text-zinc-600 transition group-hover:translate-x-0.5 group-hover:text-[#c7a76a]" />
+                    </div>
+                    <div className="mt-4 grid grid-cols-3 gap-2 border-t border-white/[.07] pt-3 font-mono text-[9px]">
+                      <span className="text-zinc-500">TRADES <b className="ml-1 text-zinc-200">{tech.count}</b></span>
+                      <span className="text-zinc-500">WR <b className="ml-1 text-[#d9bc82]">{tech.winRate.toFixed(0)}%</b></span>
+                      <span className={`text-right ${tech.totalPnL >= 0 ? 'text-emerald-300' : 'text-rose-300'}`}>{tech.totalPnL >= 0 ? '+' : '-'}${Math.abs(tech.totalPnL).toLocaleString('en-US', { maximumFractionDigits: 2 })}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {selectedTechnique && (
+                <div className="animate-fade-in border-t border-white/10 pt-5">
+                  <div className="flex items-center justify-between gap-4">
+                    <div><p className="font-mono text-[9px] uppercase tracking-wider text-zinc-500">{selectedTechnique}</p><h4 className="mt-1 text-sm font-medium text-zinc-100">Price Key performance</h4></div>
+                    {selectedPriceKey && <button type="button" onClick={() => setSelectedPriceKey(null)} className="text-[10px] text-zinc-500 transition hover:text-[#d9bc82]">ดู Price Key ทั้งหมด</button>}
+                  </div>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                    {priceKeyStats.map((key) => (
+                      <button key={key.name} type="button" onClick={() => setSelectedPriceKey(key.name)} className={`flex items-center justify-between gap-4 border px-4 py-3 text-left transition ${selectedPriceKey === key.name ? 'border-[#c7a76a] bg-[#c7a76a]/[.07]' : 'border-white/10 bg-[#0b0c0a] hover:border-white/25'}`}>
+                        <span className="min-w-0"><b className="block truncate text-xs font-medium text-zinc-200">{key.name}</b><small className="mt-1 block font-mono text-[8px] text-zinc-600">{key.wins}W · {key.losses}L · {key.count} trades</small></span>
+                        <span className={`shrink-0 font-mono text-sm ${key.winRate >= 50 ? 'text-[#d9bc82]' : 'text-rose-300'}`}>{key.winRate.toFixed(0)}%</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {selectedTechnique && selectedPriceKey && (
+                <div className="animate-fade-in border-t border-white/10 pt-5">
+                  <p className="font-mono text-[9px] uppercase tracking-wider text-[#c7a76a]">{selectedTechnique} / {selectedPriceKey}</p>
+                  <h4 className="mt-1 text-sm font-medium text-zinc-100">ประวัติไม้เทรดและ Chart evidence</h4>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                    {selectedPriceKeyTrades.map((trade) => {
+                      const outcome = getTradeOutcome(trade);
+                      return (
+                        <button key={trade.id} type="button" onClick={() => onViewTrade(trade)} className="group overflow-hidden border border-white/10 bg-[#0b0c0a] text-left transition hover:border-[#c7a76a]/55">
+                          {trade.imageUrl ? <img src={trade.imageUrl} alt={`${selectedTechnique} ${selectedPriceKey}`} className="h-28 w-full border-b border-white/10 object-cover transition duration-300 group-hover:scale-[1.015]" /> : <div className="grid h-28 place-items-center border-b border-white/10 text-zinc-700"><ImageIcon className="h-6 w-6" /></div>}
+                          <span className="block p-3">
+                            <span className="flex items-center justify-between gap-3"><b className="font-mono text-[9px] text-zinc-500">{trade.date}</b><b className={`font-mono text-xs ${trade.profitLoss >= 0 ? 'text-emerald-300' : 'text-rose-300'}`}>{trade.profitLoss >= 0 ? '+' : '-'}${Math.abs(trade.profitLoss).toLocaleString('en-US', { maximumFractionDigits: 2 })}</b></span>
+                            <span className="mt-2 flex items-center justify-between gap-3"><span className="truncate text-xs text-zinc-300">{trade.reason || 'ไม่มีบันทึกเหตุผล'}</span><small className={`shrink-0 font-mono text-[8px] ${outcome === 'loss' ? 'text-rose-300' : outcome === 'win' ? 'text-emerald-300' : 'text-[#d9bc82]'}`}>{OUTCOME_LABELS[outcome]}</small></span>
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </div>
           )}
-        </div>
+        </section>
 
         {/* Emotion breakdown analysis */}
-        <div className="self-start border border-amber-500/15 bg-[#11110F] p-5 shadow-none lg:col-span-5">
+        <div className="self-start border border-amber-500/15 bg-[#11110F] p-5 shadow-none">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <Heart className="h-5 w-5 text-amber-400" />
