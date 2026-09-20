@@ -23,6 +23,7 @@ A local-first decision journal for reviewing trading process, performance, and p
 - Automatic migration from the V2.5 browser data model
 - Adaptive navigation with a responsive mobile header, switchable sticky desktop top bar or side rail, and an animated compact rail for tablet-width screens
 - An in-product Release Ledger for the complete V3.0.9 feature and refinement summary
+- Thai, English, Simplified Chinese, and German translations inside the Release Ledger
 
 ## Privacy model
 

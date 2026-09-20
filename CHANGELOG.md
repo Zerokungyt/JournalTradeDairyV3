@@ -1,5 +1,22 @@
 # Changelog
 
+## V3.0.9-release-translations — 2026-09-20
+
+### Added
+
+- Added TH, EN, ZH, and DE language controls to the V3.0.9 Release Ledger
+- Added complete localized release copy for Thai, English, Simplified Chinese, and German
+- Added a browser-persistent language preference with Thai as the first-use default
+
+### Changed
+
+- Styled language abbreviations as compact square gold controls that remain consistent with the Midnight Editorial interface
+
+### Verification
+
+- TypeScript type-check: pass
+- Vite production build: pass
+
 ## V3.0.9 — Final V3 patch — 2026-09-20
 
 ### Added
