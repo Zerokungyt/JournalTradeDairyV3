@@ -1,5 +1,24 @@
 # Changelog
 
+## V3.0.9 — Final V3 patch — 2026-09-20
+
+### Added
+
+- Added an in-product Release Ledger summarizing the complete Trade Record, Visual Evidence, Research, Analytics, and Workspace feature set
+- Added persistent Release Ledger entry points to the side rail, compact rail, top navigation, and mobile navigation
+- Added a subtle NEW indicator that clears after the current release notes are opened and remains dismissed on that browser
+
+### Changed
+
+- Set the public application version to 3.0.9
+- Kept release information separate from the working dashboard so the journal remains focused and uncluttered
+- Included the LucasTD creator signature in the final release record
+
+### Verification
+
+- TypeScript type-check: pass
+- Vite production build: pass
+
 ## 3.6.0-before-after-evidence — 2026-09-20
 
 ### Added

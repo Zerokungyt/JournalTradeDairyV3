@@ -1,4 +1,4 @@
-import { BarChart3, BookOpen, Settings2, UserRound, Wallet } from 'lucide-react';
+import { BarChart3, BookOpen, ScrollText, Settings2, UserRound, Wallet } from 'lucide-react';
 import { UserProfile } from '../types';
 import NavigationSettings, { NavigationPosition } from './NavigationSettings';
 
@@ -15,9 +15,11 @@ interface HeaderProps {
   railCollapsed: boolean;
   onNavigationPositionChange: (position: NavigationPosition) => void;
   onRailCollapsedChange: (collapsed: boolean) => void;
+  onOpenReleaseNotes: () => void;
+  hasUnreadRelease: boolean;
 }
 
-export default function Header({ user, activeTab, setActiveTab, onOpenProfile, onOpenCashflow, totalTrades, overallWinRate, netEquity, navigationPosition, railCollapsed, onNavigationPositionChange, onRailCollapsedChange }: HeaderProps) {
+export default function Header({ user, activeTab, setActiveTab, onOpenProfile, onOpenCashflow, totalTrades, overallWinRate, netEquity, navigationPosition, railCollapsed, onNavigationPositionChange, onRailCollapsedChange, onOpenReleaseNotes, hasUnreadRelease }: HeaderProps) {
   const tabClass = (tab: 'calendar' | 'dashboard') => `relative flex flex-1 items-center justify-center gap-2 px-4 py-3 text-[11px] font-medium uppercase tracking-[.12em] transition md:flex-none ${activeTab === tab ? 'text-[#d9bc82] after:absolute after:inset-x-4 after:bottom-0 after:h-px after:bg-[#c7a76a]' : 'text-stone-500 hover:text-stone-200'}`;
 
   return (
@@ -69,9 +71,16 @@ export default function Header({ user, activeTab, setActiveTab, onOpenProfile, o
             <button onClick={() => setActiveTab('calendar')} className={tabClass('calendar')}><BookOpen className="h-3.5 w-3.5" /> Journal</button>
             <button onClick={() => setActiveTab('dashboard')} className={tabClass('dashboard')}><BarChart3 className="h-3.5 w-3.5" /> Analysis</button>
           </nav>
-          <button onClick={onOpenCashflow} className="flex items-center gap-2 border-l border-white/10 px-4 font-mono text-[9px] uppercase tracking-[.14em] text-stone-500 transition hover:text-[#d9bc82]">
-            <Wallet className="h-3.5 w-3.5" /><span className="hidden sm:inline">Capital ledger</span>
-          </button>
+          <div className="flex items-stretch">
+            <button onClick={onOpenCashflow} className="flex items-center gap-2 border-l border-white/10 px-3 font-mono text-[9px] uppercase tracking-[.14em] text-stone-500 transition hover:text-[#d9bc82] sm:px-4">
+              <Wallet className="h-3.5 w-3.5" /><span className="hidden sm:inline">Capital ledger</span>
+            </button>
+            <button type="button" onClick={onOpenReleaseNotes} className="relative flex items-center gap-2 border-l border-white/10 px-3 font-mono text-[9px] uppercase tracking-[.14em] text-stone-500 transition hover:text-[#d9bc82] sm:px-4" aria-label="เปิดรายละเอียดแพตช์ V3.0.9" title="Release Ledger · V3.0.9">
+              <ScrollText className="h-3.5 w-3.5" />
+              <span className="hidden md:inline">V3.0.9</span>
+              {hasUnreadRelease && <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#c7a76a] shadow-[0_0_8px_rgba(199,167,106,.8)]" aria-label="มีรายละเอียดแพตช์ใหม่" />}
+            </button>
+          </div>
         </div>
       </div>
     </header>

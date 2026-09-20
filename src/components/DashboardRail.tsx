@@ -1,4 +1,4 @@
-import { BarChart3, BookOpen, ChevronLeft, Database, Settings2, UserRound, Wallet } from 'lucide-react';
+import { BarChart3, BookOpen, ChevronLeft, Database, ScrollText, Settings2, UserRound, Wallet } from 'lucide-react';
 import { UserProfile } from '../types';
 import NavigationSettings, { NavigationPosition } from './NavigationSettings';
 
@@ -15,6 +15,8 @@ interface DashboardRailProps {
   navigationPosition: NavigationPosition;
   onCollapsedChange: (collapsed: boolean) => void;
   onNavigationPositionChange: (position: NavigationPosition) => void;
+  onOpenReleaseNotes: () => void;
+  hasUnreadRelease: boolean;
 }
 
 export default function DashboardRail({
@@ -30,6 +32,8 @@ export default function DashboardRail({
   navigationPosition,
   onCollapsedChange,
   onNavigationPositionChange,
+  onOpenReleaseNotes,
+  hasUnreadRelease,
 }: DashboardRailProps) {
   const navClass = (tab: 'calendar' | 'dashboard') =>
     `group flex w-full items-center border-l py-3 text-left transition-all duration-300 ${collapsed ? 'justify-center px-2' : 'justify-between px-4'} ${
@@ -93,6 +97,13 @@ export default function DashboardRail({
       </div>
 
       <div className="mt-auto shrink-0">
+        <div className={`mb-3 ${collapsed ? 'mx-2' : 'mx-5'}`}>
+          <button type="button" onClick={onOpenReleaseNotes} className={`group relative flex w-full items-center border border-white/[.08] bg-white/[.012] py-2.5 text-stone-500 transition hover:border-[#c7a76a]/35 hover:bg-[#c7a76a]/[.04] hover:text-[#d9bc82] ${collapsed ? 'justify-center px-2' : 'justify-between px-3'}`} title="Release Ledger · V3.0.9" aria-label="เปิดรายละเอียดแพตช์ V3.0.9">
+            <span className="flex min-w-0 items-center gap-2.5"><ScrollText className="h-3.5 w-3.5 shrink-0" /><span className={`overflow-hidden whitespace-nowrap font-mono text-[8px] uppercase tracking-[.12em] transition-all duration-300 ${collapsed ? 'max-w-0 opacity-0' : 'max-w-28 opacity-100'}`}>Release ledger</span></span>
+            <span className={`overflow-hidden whitespace-nowrap font-mono text-[8px] text-[#bda778] transition-all duration-300 ${collapsed ? 'max-w-0 opacity-0' : 'max-w-16 opacity-100'}`}>V3.0.9</span>
+            {hasUnreadRelease && <span className={`absolute h-1.5 w-1.5 rounded-full bg-[#c7a76a] shadow-[0_0_8px_rgba(199,167,106,.8)] ${collapsed ? 'right-1.5 top-1.5' : '-right-0.5 -top-0.5'}`} aria-label="มีรายละเอียดแพตช์ใหม่" />}
+          </button>
+        </div>
         <div className={`mb-4 flex items-center font-mono text-[8px] uppercase tracking-[.12em] text-stone-600 ${collapsed ? 'mx-2 justify-center' : 'mx-5 gap-2'}`} title="Local archive · Ready">
           <Database className="h-3 w-3 shrink-0 text-[#bda778]" /> <span className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${collapsed ? 'max-w-0 opacity-0' : 'max-w-36 opacity-100'}`}>Local archive · Ready</span>
         </div>

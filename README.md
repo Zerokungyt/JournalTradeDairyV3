@@ -15,12 +15,14 @@ A local-first decision journal for reviewing trading process, performance, and p
 - Performance dashboard with outcome-aware win rate, achieved risk-reward ratio, expectancy, and maximum drawdown
 - Technique-first entries for FIRE, ALCHEMIST, ICT, SMC, SMT, and MSNR, including free-form custom techniques and multi-technique combos
 - A drill-down technique archive with Price Key win rates, compact chart evidence, and full trade records
+- Before and After chart evidence with After retained as the compact history thumbnail
 - Technique, Price Key, and emotion breakdowns that keep BE and BE+ out of decided-trade win rate
 - Deposit and withdrawal records
 - Custom local profile, strategy identity, and avatar upload
 - Versioned JSON export and restore
 - Automatic migration from the V2.5 browser data model
 - Adaptive navigation with a responsive mobile header, switchable sticky desktop top bar or side rail, and an animated compact rail for tablet-width screens
+- An in-product Release Ledger for the complete V3.0.9 feature and refinement summary
 
 ## Privacy model
 
@@ -50,4 +52,4 @@ GitHub Pages and Netlify can safely use the same source repository. Journal reco
 
 ## Status
 
-V3 foundation is complete. Planned work includes stronger storage capacity for image-heavy journals, deeper process-quality metrics, accessibility review, and structured usability testing.
+V3.0.9 is the final V3 feature patch and is ready for user testing. Planned future work includes stronger storage capacity for image-heavy journals, deeper process-quality metrics, accessibility review, and structured usability testing.

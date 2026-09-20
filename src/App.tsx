@@ -6,6 +6,7 @@ import DashboardView from './components/DashboardView';
 import TradeFormModal from './components/TradeFormModal';
 import AuthProfileModal from './components/AuthProfileModal';
 import CashflowModal from './components/CashflowModal';
+import ReleaseNotesModal, { RELEASE_SEEN_KEY, RELEASE_VERSION } from './components/ReleaseNotesModal';
 import { dbService } from './lib/db';
 import { Trade, UserProfile } from './types';
 import { getTradeOutcome, isDecidedOutcome } from './lib/tradeTaxonomy';
@@ -35,6 +36,8 @@ export default function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
   const [isCashflowModalOpen, setIsCashflowModalOpen] = useState(false);
+  const [isReleaseNotesOpen, setIsReleaseNotesOpen] = useState(false);
+  const [hasUnreadRelease, setHasUnreadRelease] = useState(() => localStorage.getItem(RELEASE_SEEN_KEY) !== RELEASE_VERSION);
   const [selectedDate, setSelectedDate] = useState(() => {
     const now = new Date();
     return now.toISOString().split('T')[0];
@@ -112,6 +115,12 @@ export default function App() {
     setIsTradeModalOpen(true);
   };
 
+  const handleOpenReleaseNotes = () => {
+    localStorage.setItem(RELEASE_SEEN_KEY, RELEASE_VERSION);
+    setHasUnreadRelease(false);
+    setIsReleaseNotesOpen(true);
+  };
+
   // Header quick metrics calculations
   const headerStats = useMemo(() => {
     const total = trades.length;
@@ -147,6 +156,8 @@ export default function App() {
         railCollapsed={railCollapsed}
         onNavigationPositionChange={setNavigationPosition}
         onRailCollapsedChange={setRailCollapsed}
+        onOpenReleaseNotes={handleOpenReleaseNotes}
+        hasUnreadRelease={hasUnreadRelease}
       />
 
       <div className={`z-10 mx-auto grid w-full max-w-[1600px] transition-[grid-template-columns,gap] duration-300 lg:px-6 ${
@@ -169,6 +180,8 @@ export default function App() {
           navigationPosition={navigationPosition}
           onCollapsedChange={setRailCollapsed}
           onNavigationPositionChange={setNavigationPosition}
+          onOpenReleaseNotes={handleOpenReleaseNotes}
+          hasUnreadRelease={hasUnreadRelease}
         />}
 
         <div className="min-w-0">
@@ -266,6 +279,8 @@ export default function App() {
           onCashflowChange={() => reloadData(currentUser.uid)}
         />
       )}
+
+      <ReleaseNotesModal isOpen={isReleaseNotesOpen} onClose={() => setIsReleaseNotesOpen(false)} />
     </div>
   );
 }
