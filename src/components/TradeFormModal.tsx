@@ -94,11 +94,12 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
       const normalizedTechniques = [...presetTechniques, ...(customTechniques.length ? ['อื่น ๆ'] : [])];
       const savedSetup = getTradePriceKey(activeTrade);
       const isSetupPreset = getPriceKeysForTechniques(normalizedTechniques).includes(savedSetup);
+      const hasCustomTechnique = customTechniques.length > 0;
       setDate(activeTrade.date);
       setTechniques(normalizedTechniques.length ? normalizedTechniques : ['อื่น ๆ']);
       setCustomTechnique(customTechniques.join(' + '));
-      setSetup(isSetupPreset ? savedSetup : 'อื่น ๆ');
-      setCustomSetup(isSetupPreset ? '' : savedSetup);
+      setSetup(hasCustomTechnique || !isSetupPreset ? 'อื่น ๆ' : savedSetup);
+      setCustomSetup(hasCustomTechnique || !isSetupPreset ? (savedSetup === 'อื่น ๆ' ? '' : savedSetup) : '');
       setDirection(activeTrade.direction || 'buy');
       setTimeframe(activeTrade.timeframe || 'M15');
       setEntryStyle(activeTrade.entryStyle || 'direct');
@@ -168,11 +169,23 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
   };
 
   const toggleTechnique = (value: string) => {
+    const wasSelected = techniques.includes(value);
     const next = techniques.includes(value)
       ? techniques.length > 1 ? techniques.filter((item) => item !== value) : techniques
       : [...techniques, value];
     setTechniques(next);
-    if (value === 'อื่น ๆ' && techniques.includes(value)) setCustomTechnique('');
+    if (value === 'อื่น ๆ' && !wasSelected) {
+      setSetup('อื่น ๆ');
+      setCustomSetup('');
+      return;
+    }
+    if (value === 'อื่น ๆ' && wasSelected && !next.includes('อื่น ๆ')) {
+      setCustomTechnique('');
+      const nextPriceKeys = getPriceKeysForTechniques(next);
+      setSetup(nextPriceKeys.find((item) => item !== 'อื่น ๆ') || 'อื่น ๆ');
+      setCustomSetup('');
+      return;
+    }
     const nextPriceKeys = getPriceKeysForTechniques(next);
     if (!nextPriceKeys.includes(setup)) {
       setSetup(nextPriceKeys[0]);
@@ -181,11 +194,13 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
   };
 
   const priceKeyOptions = getPriceKeysForTechniques(techniques);
+  const usesCustomTechnique = techniques.includes('อื่น ๆ');
+  const usesCustomPriceKey = usesCustomTechnique || setup === 'อื่น ๆ';
   const cleanTechniques = techniques.flatMap((item) => item === 'อื่น ๆ'
     ? customTechnique.trim() ? [customTechnique.trim()] : []
     : [item]);
   const cleanTechnique = cleanTechniques.join(' + ') || 'ยังไม่ได้เลือก';
-  const cleanSetup = setup === 'อื่น ๆ' ? customSetup.trim() || 'อื่น ๆ' : setup;
+  const cleanSetup = usesCustomPriceKey ? customSetup.trim() || 'อื่น ๆ' : setup;
   const tp = Math.abs(Number(tpInput.replace(/,/g, '')) || 0);
   const sl = Math.abs(Number(slInput.replace(/,/g, '')) || 0);
   const plannedRrr = sl > 0 ? tp / sl : 0;
@@ -200,6 +215,10 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
     try {
       if (!cleanTechniques.length) {
         setSaveError('กรุณาระบุชื่อ Technique ในช่องอื่น ๆ');
+        return;
+      }
+      if (usesCustomPriceKey && !customSetup.trim()) {
+        setSaveError('กรุณาระบุชื่อ Price Key / Entry model');
         return;
       }
       setIsSaving(true);
@@ -277,14 +296,16 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
                   <div className="flex flex-wrap items-baseline gap-3"><span className="font-mono text-[10px] text-[#c7a76a]">01</span><h3 className="text-sm font-medium text-stone-100">Technique &amp; Price Key</h3><span className="text-xs text-stone-600">เลือกศาสตร์หลักก่อน แล้วระบุโมเดลที่ใช้เข้าไม้</span></div>
                   <div className="space-y-4">
                     <div className="space-y-1.5"><span className="font-mono text-[9px] uppercase tracking-wider text-stone-500">Technique · เลือกได้มากกว่า 1</span><div className="grid grid-cols-2 gap-2 sm:grid-cols-4">{TRADE_TECHNIQUES.map((item) => <button key={item} type="button" onClick={() => toggleTechnique(item)} aria-pressed={techniques.includes(item)} className={`border px-3 py-2.5 text-left text-xs transition ${techniques.includes(item) ? 'border-[#c7a76a] bg-[#c7a76a]/10 text-stone-100' : 'border-white/10 text-stone-500 hover:border-white/25 hover:text-stone-200'}`}>{item}</button>)}</div><p className="font-mono text-[9px] text-[#bda778]">COMBO · {cleanTechnique}</p></div>
-                    <div className="grid gap-4 sm:grid-cols-[150px_minmax(0,1fr)]">
+                    <div className={`grid gap-4 ${usesCustomTechnique ? 'sm:max-w-[150px]' : 'sm:grid-cols-[150px_minmax(0,1fr)]'}`}>
                       <label className="space-y-1.5"><span className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-wider text-stone-500"><Calendar className="h-3 w-3" /> วันที่</span><input type="date" value={date} onChange={(event) => setDate(event.target.value)} className={fieldClass} /></label>
-                      <label className="space-y-1.5"><span className="font-mono text-[9px] uppercase tracking-wider text-stone-500">Price Key / Entry model</span><select value={setup} onChange={(event) => { setSetup(event.target.value); setCustomSetup(''); }} className={fieldClass}>{priceKeyOptions.map((item) => <option key={item}>{item}</option>)}</select></label>
+                      {!usesCustomTechnique && (
+                        <label className="space-y-1.5"><span className="font-mono text-[9px] uppercase tracking-wider text-stone-500">Price Key / Entry model</span><select value={setup} onChange={(event) => { setSetup(event.target.value); setCustomSetup(''); }} className={fieldClass}>{priceKeyOptions.map((item) => <option key={item}>{item}</option>)}</select></label>
+                      )}
                     </div>
                   </div>
-                  {(techniques.includes('อื่น ๆ') || setup === 'อื่น ๆ') && <div className="grid gap-4 sm:grid-cols-2">
-                    {techniques.includes('อื่น ๆ') && <label className="block space-y-1.5"><span className="font-mono text-[9px] uppercase tracking-wider text-stone-500">ชื่อ Technique อื่น ๆ</span><input autoFocus value={customTechnique} onChange={(event) => { setCustomTechnique(event.target.value); setSaveError(null); }} placeholder="พิมพ์ชื่อเทคนิคที่ใช้" className={fieldClass} /></label>}
-                    {setup === 'อื่น ๆ' && <label className="block space-y-1.5"><span className="font-mono text-[9px] uppercase tracking-wider text-stone-500">ชื่อ Price Key</span><input value={customSetup} onChange={(event) => setCustomSetup(event.target.value)} placeholder="ระบุชื่อ Entry model" className={fieldClass} /></label>}
+                  {(usesCustomTechnique || setup === 'อื่น ๆ') && <div className="grid gap-4 sm:grid-cols-2">
+                    {usesCustomTechnique && <label className="block space-y-1.5"><span className="font-mono text-[9px] uppercase tracking-wider text-stone-500">ชื่อ Technique อื่น ๆ</span><input autoFocus value={customTechnique} onChange={(event) => { setCustomTechnique(event.target.value); setSaveError(null); }} placeholder="พิมพ์ชื่อเทคนิคที่ใช้" className={fieldClass} /></label>}
+                    {usesCustomPriceKey && <label className="block space-y-1.5"><span className="font-mono text-[9px] uppercase tracking-wider text-stone-500">ชื่อ Price Key</span><input value={customSetup} onChange={(event) => { setCustomSetup(event.target.value); setSaveError(null); }} placeholder="ระบุชื่อ Entry model" className={fieldClass} /></label>}
                   </div>}
                   <div className="grid gap-4 sm:grid-cols-3">
                     <div className="space-y-1.5"><span className="font-mono text-[9px] uppercase tracking-wider text-stone-500">Direction</span><div className="grid grid-cols-2 gap-2">{(['buy', 'sell'] as TradeDirection[]).map((item) => <button key={item} type="button" onClick={() => setDirection(item)} className={`border px-3 py-2.5 text-xs font-medium uppercase transition ${direction === item ? 'border-[#c7a76a] bg-[#c7a76a]/10 text-stone-100' : 'border-white/10 text-stone-500 hover:text-stone-200'}`}>{item}</button>)}</div></div>

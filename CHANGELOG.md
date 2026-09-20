@@ -1,5 +1,19 @@
 # Changelog
 
+## 3.5.2-custom-technique-flow — 2026-09-20
+
+### Changed
+
+- Replaced the preset Price Key dropdown with a direct-entry field whenever “อื่น ๆ” Technique is selected
+- Restored the preset dropdown automatically when returning to standard Techniques
+- Preserved custom Technique and Price Key values when reopening existing trade records
+- Required a named Price Key for custom Techniques so analytics do not accumulate ambiguous “อื่น ๆ” entries
+
+### Verification
+
+- TypeScript type-check: pass
+- Vite production build: pass
+
 ## 3.5.1-creator-credit — 2026-09-20
 
 ### Changed
