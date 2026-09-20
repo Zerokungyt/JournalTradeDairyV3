@@ -40,7 +40,8 @@ export interface Trade {
   userId: string;
   date: string; // YYYY-MM-DD
   technique: string; // High-level technique; retained for backward-compatible backups.
-  strategy?: string; // ALCHEMIST, FIRE, ICT, SMC, SMT, MSNR, etc.
+  strategy?: string; // Human-readable technique signature, including combos.
+  techniques?: string[]; // Structured techniques, e.g. ['ICT', 'MSNR'].
   setup?: string; // Price Key / entry model inside the selected technique.
   direction?: TradeDirection;
   timeframe?: string;

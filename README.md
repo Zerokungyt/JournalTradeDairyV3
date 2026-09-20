@@ -13,7 +13,7 @@ A local-first decision journal for reviewing trading process, performance, and p
 
 - Calendar-based trade journal with screenshots and emotional context
 - Performance dashboard with outcome-aware win rate, achieved risk-reward ratio, expectancy, and maximum drawdown
-- Technique-first entries for FIRE, ALCHEMIST, ICT, SMC, SMT, and MSNR, followed by context-aware Price Key selection
+- Technique-first entries for FIRE, ALCHEMIST, ICT, SMC, SMT, and MSNR, including free-form custom techniques and multi-technique combos
 - A drill-down technique archive with Price Key win rates, compact chart evidence, and full trade records
 - Technique, Price Key, and emotion breakdowns that keep BE and BE+ out of decided-trade win rate
 - Deposit and withdrawal records
@@ -41,6 +41,12 @@ bun run build
 ```
 
 Every push to `main` is checked and deployed through GitHub Actions.
+
+## Netlify deployment
+
+This repository is also Netlify-ready through `netlify.toml`. Import the same GitHub repository into Netlify and select the `main` branch. Netlify will run `npm run build`, publish `dist`, and automatically redeploy after every push to `main`.
+
+GitHub Pages and Netlify can safely use the same source repository. Journal records remain in each browser's local storage, so different users and domains do not share profiles, trades, screenshots, or cashflow data. Each user should export a Data Vault backup before clearing browser data or changing devices.
 
 ## Status
 

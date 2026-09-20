@@ -72,16 +72,30 @@ export function inferTechniqueFromPriceKey(priceKey: string): string {
 }
 
 export function getTradeTechnique(trade: Trade): string {
+  return getTradeTechniques(trade).join(' + ');
+}
+
+export function getTradeTechniques(trade: Trade): string[] {
+  if (Array.isArray(trade.techniques)) {
+    const structured = Array.from(new Set(trade.techniques.map((item) => item.trim()).filter(Boolean)));
+    if (structured.length) return structured;
+  }
   const strategy = trade.strategy?.trim();
-  if (strategy) return strategy;
+  if (strategy) {
+    const possibleCombo = strategy.split(/\s+\+\s+/).map((item) => item.trim()).filter(Boolean);
+    if (possibleCombo.length > 1 && possibleCombo.every((item) => TECHNIQUE_SET.has(item))) return possibleCombo;
+    return [strategy];
+  }
   const legacyTechnique = trade.technique?.trim();
-  if (legacyTechnique && TECHNIQUE_SET.has(legacyTechnique)) return legacyTechnique;
-  return inferTechniqueFromPriceKey(trade.setup?.trim() || legacyTechnique || '');
+  if (legacyTechnique && TECHNIQUE_SET.has(legacyTechnique)) return [legacyTechnique];
+  return [inferTechniqueFromPriceKey(trade.setup?.trim() || legacyTechnique || '')];
 }
 
 export function getTradePriceKey(trade: Trade): string {
-  const rawSetup = trade.setup?.trim() || trade.technique?.trim() || '';
+  const explicitSetup = trade.setup?.trim();
+  const rawSetup = explicitSetup || trade.technique?.trim() || '';
   if (!rawSetup || TECHNIQUE_SET.has(rawSetup)) return LEGACY_PRICE_KEY;
+  if (!explicitSetup && (Array.isArray(trade.techniques) || trade.strategy?.trim())) return LEGACY_PRICE_KEY;
   if (rawSetup === 'FIRE · Fibonacci Inversion') return 'Fibonacci Inversion';
   if (rawSetup === 'ICT Order Block') return 'Order Block';
   if (rawSetup === 'ICT Engulfing Order Block') return 'Engulfing Order Block';
@@ -90,6 +104,11 @@ export function getTradePriceKey(trade: Trade): string {
 
 export function getPriceKeysForTechnique(technique: string): string[] {
   return PRICE_KEYS_BY_TECHNIQUE[technique] || PRICE_KEYS_BY_TECHNIQUE['อื่น ๆ'];
+}
+
+export function getPriceKeysForTechniques(techniques: string[]): string[] {
+  const selected = techniques.length ? techniques : ['อื่น ๆ'];
+  return Array.from(new Set(selected.flatMap((technique) => getPriceKeysForTechnique(technique))));
 }
 
 // Alias retained for existing calendar call sites.

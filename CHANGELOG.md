@@ -1,5 +1,25 @@
 # Changelog
 
+## 3.5.0-combo-techniques — 2026-09-20
+
+### Added
+
+- Added independent multi-select Technique controls for combinations such as ICT + MSNR and MSNR + SMC
+- Added an inline custom Technique field when “อื่น ๆ” is selected; custom systems can also be combined with built-in techniques
+- Added structured `techniques` arrays to trade records while retaining readable legacy fields for backup compatibility
+- Added a production Netlify configuration with automatic builds from GitHub and SPA fallback routing
+
+### Changed
+
+- Price Key choices now combine the available models from every selected Technique without duplicate options
+- Technique history, Price Key statistics, calendar records, compact evidence cards, and full trade details now use the saved Technique combination
+- Existing single-technique and legacy combination records migrate automatically without discarding their original labels
+
+### Verification
+
+- TypeScript type-check: pass
+- Vite production build: pass
+
 ## 3.4.0-technique-archive — 2026-09-19
 
 ### Added

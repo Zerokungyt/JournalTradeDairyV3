@@ -8,10 +8,10 @@ import {
   OUTCOME_LABELS,
   TRADE_TECHNIQUES,
   TRADE_TIMEFRAMES,
-  getPriceKeysForTechnique,
+  getPriceKeysForTechniques,
   getTradeOutcome,
   getTradePriceKey,
-  getTradeTechnique,
+  getTradeTechniques,
 } from '../lib/tradeTaxonomy';
 
 interface TradeFormModalProps {
@@ -52,9 +52,9 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
   const [isEditing, setIsEditing] = useState(false);
   const isViewMode = !!activeTrade && !isEditing;
   const [date, setDate] = useState(selectedDate);
-  const [technique, setTechnique] = useState<string>(TRADE_TECHNIQUES[0]);
+  const [techniques, setTechniques] = useState<string[]>([TRADE_TECHNIQUES[0]]);
   const [customTechnique, setCustomTechnique] = useState('');
-  const [setup, setSetup] = useState(getPriceKeysForTechnique(TRADE_TECHNIQUES[0])[0]);
+  const [setup, setSetup] = useState(getPriceKeysForTechniques([TRADE_TECHNIQUES[0]])[0]);
   const [customSetup, setCustomSetup] = useState('');
   const [direction, setDirection] = useState<TradeDirection>('buy');
   const [timeframe, setTimeframe] = useState('M15');
@@ -88,14 +88,15 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
     setSaveError(null);
     setResearchOpen(false);
     if (activeTrade) {
-      const savedTechnique = getTradeTechnique(activeTrade);
-      const isTechniquePreset = (TRADE_TECHNIQUES as readonly string[]).includes(savedTechnique);
-      const normalizedTechnique = isTechniquePreset ? savedTechnique : 'อื่น ๆ';
+      const savedTechniques = getTradeTechniques(activeTrade);
+      const presetTechniques = savedTechniques.filter((item) => (TRADE_TECHNIQUES as readonly string[]).includes(item) && item !== 'อื่น ๆ');
+      const customTechniques = savedTechniques.filter((item) => !(TRADE_TECHNIQUES as readonly string[]).includes(item));
+      const normalizedTechniques = [...presetTechniques, ...(customTechniques.length ? ['อื่น ๆ'] : [])];
       const savedSetup = getTradePriceKey(activeTrade);
-      const isSetupPreset = getPriceKeysForTechnique(normalizedTechnique).includes(savedSetup);
+      const isSetupPreset = getPriceKeysForTechniques(normalizedTechniques).includes(savedSetup);
       setDate(activeTrade.date);
-      setTechnique(normalizedTechnique);
-      setCustomTechnique(isTechniquePreset ? '' : savedTechnique);
+      setTechniques(normalizedTechniques.length ? normalizedTechniques : ['อื่น ๆ']);
+      setCustomTechnique(customTechniques.join(' + '));
       setSetup(isSetupPreset ? savedSetup : 'อื่น ๆ');
       setCustomSetup(isSetupPreset ? '' : savedSetup);
       setDirection(activeTrade.direction || 'buy');
@@ -116,8 +117,8 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
       setNotes(activeTrade.notes || '');
     } else {
       setDate(selectedDate || new Date().toISOString().split('T')[0]);
-      setTechnique(TRADE_TECHNIQUES[0]); setCustomTechnique('');
-      setSetup(getPriceKeysForTechnique(TRADE_TECHNIQUES[0])[0]); setCustomSetup(''); setDirection('buy'); setTimeframe('M15');
+      setTechniques([TRADE_TECHNIQUES[0]]); setCustomTechnique('');
+      setSetup(getPriceKeysForTechniques([TRADE_TECHNIQUES[0]])[0]); setCustomSetup(''); setDirection('buy'); setTimeframe('M15');
       setEntryStyle('direct'); setConfirmations([]); setTpInput('1000'); setSlInput('250');
       setOutcome('win'); setExitType(EXIT_TYPES[0]); setAmountInput('0'); setRealizedR('');
       setMfe(''); setMae(''); setReason(''); setEmotion('calm'); setImageUrl(''); setNotes('');
@@ -166,15 +167,24 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
     if (value === 'breakeven') setAmountInput('0');
   };
 
-  const handleTechniqueChange = (value: string) => {
-    setTechnique(value);
-    setCustomTechnique('');
-    setSetup(getPriceKeysForTechnique(value)[0]);
-    setCustomSetup('');
+  const toggleTechnique = (value: string) => {
+    const next = techniques.includes(value)
+      ? techniques.length > 1 ? techniques.filter((item) => item !== value) : techniques
+      : [...techniques, value];
+    setTechniques(next);
+    if (value === 'อื่น ๆ' && techniques.includes(value)) setCustomTechnique('');
+    const nextPriceKeys = getPriceKeysForTechniques(next);
+    if (!nextPriceKeys.includes(setup)) {
+      setSetup(nextPriceKeys[0]);
+      setCustomSetup('');
+    }
   };
 
-  const priceKeyOptions = getPriceKeysForTechnique(technique);
-  const cleanTechnique = technique === 'อื่น ๆ' ? customTechnique.trim() || 'อื่น ๆ' : technique;
+  const priceKeyOptions = getPriceKeysForTechniques(techniques);
+  const cleanTechniques = techniques.flatMap((item) => item === 'อื่น ๆ'
+    ? customTechnique.trim() ? [customTechnique.trim()] : []
+    : [item]);
+  const cleanTechnique = cleanTechniques.join(' + ') || 'ยังไม่ได้เลือก';
   const cleanSetup = setup === 'อื่น ๆ' ? customSetup.trim() || 'อื่น ๆ' : setup;
   const tp = Math.abs(Number(tpInput.replace(/,/g, '')) || 0);
   const sl = Math.abs(Number(slInput.replace(/,/g, '')) || 0);
@@ -188,11 +198,15 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
     event?.stopPropagation();
     if (isSaving) return;
     try {
+      if (!cleanTechniques.length) {
+        setSaveError('กรุณาระบุชื่อ Technique ในช่องอื่น ๆ');
+        return;
+      }
       setIsSaving(true);
       setSaveError(null);
       onSave({
         id: activeTrade?.id, userId: userId || 'local_owner', date: date || selectedDate,
-        technique: cleanTechnique, strategy: cleanTechnique, setup: cleanSetup, direction, timeframe, entryStyle, confirmations,
+        technique: cleanTechnique, strategy: cleanTechnique, techniques: cleanTechniques, setup: cleanSetup, direction, timeframe, entryStyle, confirmations,
         tp, sl, outcome, exitType, profitLoss: calculatedPnL,
         realizedR: parseOptionalNumber(realizedR), mfe: parseOptionalNumber(mfe), mae: parseOptionalNumber(mae),
         reason: reason.trim(), emotion, imageUrl, notes: notes.trim(),
@@ -261,13 +275,15 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
               <div className="space-y-7">
                 <section className="space-y-4">
                   <div className="flex flex-wrap items-baseline gap-3"><span className="font-mono text-[10px] text-[#c7a76a]">01</span><h3 className="text-sm font-medium text-stone-100">Technique &amp; Price Key</h3><span className="text-xs text-stone-600">เลือกศาสตร์หลักก่อน แล้วระบุโมเดลที่ใช้เข้าไม้</span></div>
-                  <div className="grid gap-4 sm:grid-cols-[150px_minmax(0,1fr)_minmax(0,1fr)]">
-                    <label className="space-y-1.5"><span className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-wider text-stone-500"><Calendar className="h-3 w-3" /> วันที่</span><input type="date" value={date} onChange={(event) => setDate(event.target.value)} className={fieldClass} /></label>
-                    <label className="space-y-1.5"><span className="font-mono text-[9px] uppercase tracking-wider text-stone-500">Technique</span><select value={technique} onChange={(event) => handleTechniqueChange(event.target.value)} className={fieldClass}>{TRADE_TECHNIQUES.map((item) => <option key={item}>{item}</option>)}</select></label>
-                    <label className="space-y-1.5"><span className="font-mono text-[9px] uppercase tracking-wider text-stone-500">Price Key / Entry model</span><select value={setup} onChange={(event) => { setSetup(event.target.value); setCustomSetup(''); }} className={fieldClass}>{priceKeyOptions.map((item) => <option key={item}>{item}</option>)}</select></label>
+                  <div className="space-y-4">
+                    <div className="space-y-1.5"><span className="font-mono text-[9px] uppercase tracking-wider text-stone-500">Technique · เลือกได้มากกว่า 1</span><div className="grid grid-cols-2 gap-2 sm:grid-cols-4">{TRADE_TECHNIQUES.map((item) => <button key={item} type="button" onClick={() => toggleTechnique(item)} aria-pressed={techniques.includes(item)} className={`border px-3 py-2.5 text-left text-xs transition ${techniques.includes(item) ? 'border-[#c7a76a] bg-[#c7a76a]/10 text-stone-100' : 'border-white/10 text-stone-500 hover:border-white/25 hover:text-stone-200'}`}>{item}</button>)}</div><p className="font-mono text-[9px] text-[#bda778]">COMBO · {cleanTechnique}</p></div>
+                    <div className="grid gap-4 sm:grid-cols-[150px_minmax(0,1fr)]">
+                      <label className="space-y-1.5"><span className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-wider text-stone-500"><Calendar className="h-3 w-3" /> วันที่</span><input type="date" value={date} onChange={(event) => setDate(event.target.value)} className={fieldClass} /></label>
+                      <label className="space-y-1.5"><span className="font-mono text-[9px] uppercase tracking-wider text-stone-500">Price Key / Entry model</span><select value={setup} onChange={(event) => { setSetup(event.target.value); setCustomSetup(''); }} className={fieldClass}>{priceKeyOptions.map((item) => <option key={item}>{item}</option>)}</select></label>
+                    </div>
                   </div>
-                  {(technique === 'อื่น ๆ' || setup === 'อื่น ๆ') && <div className="grid gap-4 sm:grid-cols-2">
-                    {technique === 'อื่น ๆ' && <label className="block space-y-1.5"><span className="font-mono text-[9px] uppercase tracking-wider text-stone-500">ชื่อ Technique</span><input value={customTechnique} onChange={(event) => setCustomTechnique(event.target.value)} placeholder="ระบุชื่อศาสตร์หรือระบบหลัก" className={fieldClass} /></label>}
+                  {(techniques.includes('อื่น ๆ') || setup === 'อื่น ๆ') && <div className="grid gap-4 sm:grid-cols-2">
+                    {techniques.includes('อื่น ๆ') && <label className="block space-y-1.5"><span className="font-mono text-[9px] uppercase tracking-wider text-stone-500">ชื่อ Technique อื่น ๆ</span><input autoFocus value={customTechnique} onChange={(event) => { setCustomTechnique(event.target.value); setSaveError(null); }} placeholder="พิมพ์ชื่อเทคนิคที่ใช้" className={fieldClass} /></label>}
                     {setup === 'อื่น ๆ' && <label className="block space-y-1.5"><span className="font-mono text-[9px] uppercase tracking-wider text-stone-500">ชื่อ Price Key</span><input value={customSetup} onChange={(event) => setCustomSetup(event.target.value)} placeholder="ระบุชื่อ Entry model" className={fieldClass} /></label>}
                   </div>}
                   <div className="grid gap-4 sm:grid-cols-3">
