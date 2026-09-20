@@ -1,5 +1,24 @@
 # Changelog
 
+## 3.6.0-before-after-evidence — 2026-09-20
+
+### Added
+
+- Added separate Before and After chart uploads to new and existing trade records
+- Added a full-detail evidence comparison that presents the pre-entry thesis before the post-trade outcome
+- Added independent replacement, drag-and-drop, preview, and removal controls for both images
+
+### Changed
+
+- Existing chart images remain the After image automatically for complete backward compatibility
+- Calendar cards and Technique history continue using only the After image as their compact thumbnail
+- Journal backup and restore now preserve the optional Before image alongside the existing After image
+
+### Verification
+
+- TypeScript type-check: pass
+- Vite production build: pass
+
 ## 3.5.2-custom-technique-flow — 2026-09-20
 
 ### Changed

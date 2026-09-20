@@ -57,7 +57,8 @@ export interface Trade {
   profitLoss: number; // Positive for profit, negative for loss
   reason: string;
   emotion: TradeEmotion;
-  imageUrl: string; // Can be base64 or external url
+  beforeImageUrl?: string; // Optional chart captured before entry.
+  imageUrl: string; // After chart and the canonical history thumbnail; can be base64 or external URL.
   notes?: string;
   createdAt: number;
 }

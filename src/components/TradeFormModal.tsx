@@ -70,15 +70,17 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
   const [mae, setMae] = useState('');
   const [reason, setReason] = useState('');
   const [emotion, setEmotion] = useState<TradeEmotion>('calm');
+  const [beforeImageUrl, setBeforeImageUrl] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [notes, setNotes] = useState('');
   const [researchOpen, setResearchOpen] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
+  const [draggingImage, setDraggingImage] = useState<'before' | 'after' | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const beforeFileInputRef = useRef<HTMLInputElement>(null);
+  const afterFileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setIsEditing(false);
@@ -114,6 +116,7 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
       setMae(activeTrade.mae === undefined ? '' : String(activeTrade.mae));
       setReason(activeTrade.reason || '');
       setEmotion(activeTrade.emotion || 'calm');
+      setBeforeImageUrl(activeTrade.beforeImageUrl || '');
       setImageUrl(activeTrade.imageUrl || '');
       setNotes(activeTrade.notes || '');
     } else {
@@ -122,7 +125,7 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
       setSetup(getPriceKeysForTechniques([TRADE_TECHNIQUES[0]])[0]); setCustomSetup(''); setDirection('buy'); setTimeframe('M15');
       setEntryStyle('direct'); setConfirmations([]); setTpInput('1000'); setSlInput('250');
       setOutcome('win'); setExitType(EXIT_TYPES[0]); setAmountInput('0'); setRealizedR('');
-      setMfe(''); setMae(''); setReason(''); setEmotion('calm'); setImageUrl(''); setNotes('');
+      setMfe(''); setMae(''); setReason(''); setEmotion('calm'); setBeforeImageUrl(''); setImageUrl(''); setNotes('');
     }
   }, [activeTrade, selectedDate, isOpen]);
 
@@ -149,11 +152,14 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
     reader.readAsDataURL(file);
   });
 
-  const receiveImage = async (file?: File) => {
+  const receiveImage = async (target: 'before' | 'after', file?: File) => {
     if (!file) return;
     try {
       const compressed = await compressImageFile(file);
-      if (compressed) setImageUrl(compressed);
+      if (compressed) {
+        if (target === 'before') setBeforeImageUrl(compressed);
+        else setImageUrl(compressed);
+      }
     } catch (error) {
       console.warn('Error compressing image:', error);
     }
@@ -228,7 +234,7 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
         technique: cleanTechnique, strategy: cleanTechnique, techniques: cleanTechniques, setup: cleanSetup, direction, timeframe, entryStyle, confirmations,
         tp, sl, outcome, exitType, profitLoss: calculatedPnL,
         realizedR: parseOptionalNumber(realizedR), mfe: parseOptionalNumber(mfe), mae: parseOptionalNumber(mae),
-        reason: reason.trim(), emotion, imageUrl, notes: notes.trim(),
+        reason: reason.trim(), emotion, beforeImageUrl, imageUrl, notes: notes.trim(),
       });
       setSaveSuccess(true);
       setTimeout(() => { setIsSaving(false); setSaveSuccess(false); onClose(); }, 300);
@@ -287,7 +293,28 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
                     <div><p className="font-mono text-[9px] uppercase text-stone-500">Entry thesis</p><p className="mt-2 whitespace-pre-wrap border border-white/10 bg-[#0b0c0a] p-3 text-sm leading-6 text-stone-300">{reason || 'ไม่ได้ระบุ'}</p></div>
                     <div><p className="font-mono text-[9px] uppercase text-stone-500">Research note</p><p className="mt-2 whitespace-pre-wrap border border-white/10 bg-[#0b0c0a] p-3 text-sm leading-6 text-stone-300">{notes || 'ไม่ได้ระบุ'}</p></div>
                   </div>
-                  <div><p className="mb-2 font-mono text-[9px] uppercase text-stone-500">Chart evidence</p>{imageUrl ? <img src={imageUrl} alt="Trade chart" className="max-h-[380px] w-full border border-white/10 bg-[#0b0c0a] object-contain" /> : <div className="grid min-h-[230px] place-items-center border border-dashed border-white/10 text-stone-700"><ImageIcon className="h-8 w-8" /></div>}</div>
+                  <div>
+                    <div className="mb-3 flex items-end justify-between gap-3">
+                      <div><p className="font-mono text-[9px] uppercase text-stone-500">Chart evidence</p><p className="mt-1 text-[11px] text-stone-600">เปรียบเทียบแผนก่อนเข้า กับผลลัพธ์หลังจบไม้</p></div>
+                      {beforeImageUrl && imageUrl && <span className="font-mono text-[8px] uppercase tracking-[.18em] text-[#bda778]">Before → After</span>}
+                    </div>
+                    <div className="space-y-3">
+                      {beforeImageUrl && (
+                        <figure className="border border-white/10 bg-[#0b0c0a] p-2">
+                          <figcaption className="mb-2 flex items-center gap-2 font-mono text-[8px] uppercase tracking-[.16em] text-stone-500"><span className="h-px w-5 bg-stone-600" /> Before · ก่อนเข้าไม้</figcaption>
+                          <img src={beforeImageUrl} alt="Chart before trade entry" className="max-h-[320px] w-full object-contain" />
+                        </figure>
+                      )}
+                      {imageUrl ? (
+                        <figure className="border border-[#c7a76a]/25 bg-[#0b0c0a] p-2">
+                          <figcaption className="mb-2 flex items-center gap-2 font-mono text-[8px] uppercase tracking-[.16em] text-[#bda778]"><span className="h-px w-5 bg-[#c7a76a]/60" /> After · หลังจบไม้</figcaption>
+                          <img src={imageUrl} alt="Chart after trade outcome" className="max-h-[380px] w-full object-contain" />
+                        </figure>
+                      ) : (
+                        <div className="grid min-h-[230px] place-items-center border border-dashed border-white/10 text-center text-stone-700"><div><ImageIcon className="mx-auto h-8 w-8" /><p className="mt-2 text-[10px]">ยังไม่มีภาพ After</p></div></div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             ) : (
@@ -350,12 +377,22 @@ export default function TradeFormModal({ isOpen, onClose, onSave, onDelete, sele
                 </details>
 
                 <section className="space-y-3 border-t border-white/10 pt-5">
-                  <div className="flex items-center justify-between"><p className="font-mono text-[9px] uppercase tracking-wider text-stone-500">Chart evidence</p>{imageUrl && <button type="button" onClick={() => setImageUrl('')} className="text-[10px] text-rose-400">ลบภาพ</button>}</div>
-                  <div className="grid gap-3 sm:grid-cols-[1fr_1.4fr]">
-                    <div onDragOver={(event) => { event.preventDefault(); setIsDragging(true); }} onDragLeave={() => setIsDragging(false)} onDrop={(event) => { event.preventDefault(); setIsDragging(false); receiveImage(event.dataTransfer.files?.[0]); }} onClick={() => fileInputRef.current?.click()} className={`grid min-h-[116px] cursor-pointer place-items-center border border-dashed p-4 text-center transition ${isDragging ? 'border-[#c7a76a] bg-[#c7a76a]/10 text-[#d9bc82]' : 'border-white/10 text-stone-500 hover:border-white/25'}`}>
-                      <div><Upload className="mx-auto h-5 w-5" /><p className="mt-2 text-xs">แตะเพื่ออัปโหลด หรือลากรูปมาวาง</p></div><input ref={fileInputRef} type="file" accept="image/*" onChange={(event) => receiveImage(event.target.files?.[0])} className="hidden" />
+                  <div><p className="font-mono text-[9px] uppercase tracking-wider text-stone-500">Chart evidence · Before / After</p><p className="mt-1 text-[11px] text-stone-600">ภาพ After จะใช้เป็นภาพปกในประวัติ ส่วนรายละเอียดเต็มจะแสดงทั้งสองภาพ</p></div>
+                  <div className="grid gap-3 md:grid-cols-2">
+                    <div className="border border-white/10 bg-[#0b0c0a] p-3">
+                      <div className="mb-2 flex items-center justify-between gap-3"><div><p className="font-mono text-[9px] uppercase tracking-[.16em] text-stone-400">Before</p><p className="mt-0.5 text-[10px] text-stone-600">กราฟและแผนก่อนเข้าไม้</p></div>{beforeImageUrl && <button type="button" onClick={() => setBeforeImageUrl('')} className="text-[10px] text-rose-400">ลบภาพ</button>}</div>
+                      <div onDragOver={(event) => { event.preventDefault(); setDraggingImage('before'); }} onDragLeave={() => setDraggingImage(null)} onDrop={(event) => { event.preventDefault(); setDraggingImage(null); receiveImage('before', event.dataTransfer.files?.[0]); }} onClick={() => beforeFileInputRef.current?.click()} className={`grid min-h-[150px] cursor-pointer place-items-center overflow-hidden border border-dashed text-center transition ${draggingImage === 'before' ? 'border-[#c7a76a] bg-[#c7a76a]/10 text-[#d9bc82]' : 'border-white/10 text-stone-500 hover:border-white/25'}`}>
+                        {beforeImageUrl ? <img src={beforeImageUrl} alt="Before trade preview" className="h-[150px] w-full object-contain" /> : <div className="p-4"><Upload className="mx-auto h-5 w-5" /><p className="mt-2 text-xs">เพิ่มภาพ Before</p><p className="mt-1 text-[9px] text-stone-700">แตะหรือลากรูปมาวาง</p></div>}
+                        <input ref={beforeFileInputRef} type="file" accept="image/*" onChange={(event) => receiveImage('before', event.target.files?.[0])} className="hidden" />
+                      </div>
                     </div>
-                    {imageUrl ? <img src={imageUrl} alt="Trade preview" className="h-[116px] w-full border border-white/10 bg-[#0b0c0a] object-contain" /> : <div className="grid min-h-[116px] place-items-center border border-white/10 bg-[#0b0c0a] text-stone-700"><ImageIcon className="h-6 w-6" /></div>}
+                    <div className="border border-[#c7a76a]/20 bg-[#0b0c0a] p-3">
+                      <div className="mb-2 flex items-center justify-between gap-3"><div><p className="font-mono text-[9px] uppercase tracking-[.16em] text-[#bda778]">After</p><p className="mt-0.5 text-[10px] text-stone-600">ผลลัพธ์หลังจบไม้ · ภาพปกประวัติ</p></div>{imageUrl && <button type="button" onClick={() => setImageUrl('')} className="text-[10px] text-rose-400">ลบภาพ</button>}</div>
+                      <div onDragOver={(event) => { event.preventDefault(); setDraggingImage('after'); }} onDragLeave={() => setDraggingImage(null)} onDrop={(event) => { event.preventDefault(); setDraggingImage(null); receiveImage('after', event.dataTransfer.files?.[0]); }} onClick={() => afterFileInputRef.current?.click()} className={`grid min-h-[150px] cursor-pointer place-items-center overflow-hidden border border-dashed text-center transition ${draggingImage === 'after' ? 'border-[#c7a76a] bg-[#c7a76a]/10 text-[#d9bc82]' : 'border-white/10 text-stone-500 hover:border-[#c7a76a]/45'}`}>
+                        {imageUrl ? <img src={imageUrl} alt="After trade preview" className="h-[150px] w-full object-contain" /> : <div className="p-4"><Upload className="mx-auto h-5 w-5" /><p className="mt-2 text-xs">เพิ่มภาพ After</p><p className="mt-1 text-[9px] text-stone-700">แตะหรือลากรูปมาวาง</p></div>}
+                        <input ref={afterFileInputRef} type="file" accept="image/*" onChange={(event) => receiveImage('after', event.target.files?.[0])} className="hidden" />
+                      </div>
+                    </div>
                   </div>
                 </section>
               </div>

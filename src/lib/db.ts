@@ -91,6 +91,8 @@ function normalizeTrade(trade: Trade): Trade {
     confirmations: Array.isArray(trade.confirmations) ? trade.confirmations : [],
     outcome: getTradeOutcome(trade),
     exitType: trade.exitType || '',
+    beforeImageUrl: typeof trade.beforeImageUrl === 'string' ? trade.beforeImageUrl : '',
+    imageUrl: typeof trade.imageUrl === 'string' ? trade.imageUrl : '',
   };
 }
 
