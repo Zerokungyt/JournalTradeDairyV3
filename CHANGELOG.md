@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.5.1-creator-credit — 2026-09-20
+
+### Changed
+
+- Added a restrained “Designed & developed by LucasTD” creator credit to the global footer
+- Kept the signature readable across mobile, tablet, and desktop layouts without competing with journal content
+
+### Verification
+
+- TypeScript type-check: pass
+- Vite production build: pass
+
 ## 3.5.0-combo-techniques — 2026-09-20
 
 ### Added

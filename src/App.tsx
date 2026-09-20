@@ -222,12 +222,15 @@ export default function App() {
 
       {/* Footer Branding */}
       <footer className="border-t border-white/10 px-4 py-7 font-mono text-[9px] uppercase tracking-[.16em] text-stone-600 lg:px-0">
-        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+        <div className="grid gap-4 text-center sm:grid-cols-[1fr_auto_1fr] sm:items-center sm:text-left">
           <p>Journal Trade Daily · Edition 03 · 2026</p>
-          <div className="flex items-center gap-5">
-            <span>Designed for deliberate review</span>
-            <span className="flex items-center gap-1.5 text-[#bda778]"><Database className="h-3 w-3" /> Local archive</span>
-          </div>
+          <p className="sm:px-5">
+            Designed &amp; developed by{' '}
+            <span className="font-semibold tracking-[.2em] text-[#c7a76a]">LucasTD</span>
+          </p>
+          <span className="flex items-center justify-center gap-1.5 text-[#bda778] sm:justify-self-end">
+            <Database className="h-3 w-3" /> Local archive
+          </span>
         </div>
       </footer>
         </div>
