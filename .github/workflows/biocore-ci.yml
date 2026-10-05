@@ -1,0 +1,25 @@
+name: BIOCORE CI
+on:
+  push:
+    branches: [biocore-tcas70]
+    paths:
+      - 'biocore/**'
+      - '.github/workflows/biocore-ci.yml'
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: biocore
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install
+        run: npm install --no-audit --no-fund
+      - name: Unit tests
+        run: npm test
+      - name: Production build
+        run: npm run build
