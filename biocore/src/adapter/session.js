@@ -150,7 +150,7 @@ finishing = { id,promise };
 return promise;
 }
 function markMistakeError(questionId,errorTypeId) {
-state = setMistakeErrorType(state,questionId,errorNames[errorTypeId]);
+state = errorTypeId ? setMistakeErrorType(state,questionId,errorNames[errorTypeId]) : {...state,mistakes:state.mistakes.map(x => x.questionId===questionId ? {...x,errorType:null}:x)};
 save();
 return state.mistakes.find(x => x.questionId === questionId);
 }
