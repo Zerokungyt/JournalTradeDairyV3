@@ -115,7 +115,7 @@ touch();
 const questions = active.questions;
 const scored = scoreExam(questions,active.answers);
 if (active.mode !== "practice") {
-for (const q of questions) state = recordAttempt(state,q,active.answers[q.id],"mock",
+for (const q of questions) state = recordAttempt(state,q,active.answers[q.id],active.config.kind === "mock" ? "mock" : "exam",
 Math.round((active.timeSpentMs[q.id] || 0)/1000),null);
 } else {
 for (const q of questions) if (!active.revealedIds.includes(q.id) && scoreQuestion(q,active.answers[q.id]).answered)
