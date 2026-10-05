@@ -43,7 +43,9 @@ export function overviewView(bank,state) {
 export function searchView(bank,state,query) {
   const needle = String(query || "").normalize("NFKC").trim().toLocaleLowerCase();
   if (!needle) return [];
-  const matches = text => String(text || "").normalize("NFKC").toLocaleLowerCase().includes(needle);
+  const aliases = { "mitosis":["ไมโทซิส"],"adh":["แอนติไดยูเรติก"],"การสังเคราะห์โปรตีน":["translation","protein-synthesis","การแปลรหัส"],"hardy weinberg":["hardy-weinberg","Hardy–Weinberg","สมดุล Hardy"] };
+  const needles = [needle,...(aliases[needle] || [])].map(x => x.toLocaleLowerCase());
+  const matches = text => needles.some(term => String(text || "").normalize("NFKC").toLocaleLowerCase().includes(term));
   const results = [];
   for (const domain of taxonomy) if ([domain.title,domain.titleTh,domain.id].some(matches))
     results.push({kind:"chapter",title:domain.titleTh,meta:"Chapter",domain:domain.id});
@@ -51,7 +53,7 @@ export function searchView(bank,state,query) {
   for (const q of bank) for (const concept of q.concepts || []) if (matches(concept) && !seenConcepts.has(concept)) {
     seenConcepts.add(concept);results.push({kind:"concept",title:concept,meta:th(q.domain)+" · "+q.subchapter,domain:q.domain,concept});
   }
-  for (const q of bank) if ([q.question,q.subchapter,...(q.tags || [])].some(matches))
+  for (const q of bank) if ([q.question,q.subchapter,...(q.concepts || []),...(q.tags || [])].some(matches))
     results.push({kind:"question",title:q.question.slice(0,110),meta:th(q.domain)+" · Level "+q.difficulty,domain:q.domain,questionId:q.id});
   for (const item of mistakesView(bank,state)) if (matches(item.question) || matches(item.subchapter))
     results.push({kind:"mistake",title:item.question.slice(0,110),meta:"เคยผิด "+item.count+" ครั้ง",domain:item.domain,questionId:item.questionId});
