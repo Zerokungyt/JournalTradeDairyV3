@@ -34,16 +34,7 @@ export async function loadQuestions(domains) {
   const key = [...selected].sort().join("|");
   if (!cache.has(key)) cache.set(key, (async () => {
     const seedModules = await Promise.all(selected.map(domain => seedLoaders[domain]()));
-    const supplemental = [];
-    if (selected.some(domain => domain === "ecology" || domain === "cell")) {
-      const module = await import("./extra-a.js");
-      supplemental.push(...module.extraAQuestions);
-    }
-    if (selected.some(domain => ["human", "plant", "genetics"].includes(domain))) {
-      const module = await import("./extra-b.js");
-      supplemental.push(...module.extraBQuestions);
-    }
-    const all = [...seedModules.flatMap(module => module.questions), ...supplemental.filter(q => selected.includes(q.domain))];
+    const all = seedModules.flatMap(module => module.questions);
     const ids = new Map(), contents = new Map(), unique = [];
     for (const q of all) {
       validateQuestion(q);
