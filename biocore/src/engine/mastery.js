@@ -7,8 +7,7 @@ export function calculateMastery(attempts, now = Date.now()) {
   const recent = sorted.slice(-Math.min(8,sorted.length));
   const recencyWeights = recent.map(a => Math.max(0.01,Math.exp(-Math.max(0,now-a.timestamp) / (30*86400000))));
   const recentScore = recent.reduce((sum,a,i) => sum + clamp(a.points/a.maxPoints,0,1)*recencyWeights[i],0) / recencyWeights.reduce((a,b) => a+b,0);
-  const difficultyWeights = sorted.map(a => 0.6 + 0.13 * clamp(a.difficulty || 3,1,5));
-  const difficultyScore = sorted.reduce((sum,a,i) => sum + ratios[i]*difficultyWeights[i],0) / difficultyWeights.reduce((a,b) => a+b,0);
+  const difficultyScore = sorted.reduce((sum,a,i) => sum + ratios[i] * (0.75 + 0.05 * clamp(a.difficulty || 3,1,5)),0) / sorted.length;
   const sample = ratios.slice(-Math.min(8,ratios.length));
   const mean = sample.reduce((a,b) => a+b,0)/sample.length;
   const variance = sample.reduce((sum,n) => sum + (n-mean)**2,0)/sample.length;
