@@ -1,6 +1,6 @@
 # BIOCORE — A-Level Biology Training System
 
-BIOCORE is a Thai language, offline first Biology training application for TCAS70 preparation. It includes chapter practice, 40 question timed mocks, detailed explanations, review scheduling, mistake tracking, mastery, recommendations, and analytics. Question content is split into domain modules under `src/data`.
+BIOCORE is a Thai language, browser-local Biology training application for TCAS70 preparation. It includes chapter practice, 40 question timed mocks, detailed explanations, review scheduling, mistake tracking, mastery, recommendations, and analytics. Question content is split into domain modules under `src/data`.
 
 ## Run
 
@@ -26,7 +26,7 @@ The Google Drive `A-Level/Bio` folder contains `Biology 🧫.zip` (304,801,395 b
 
 ## Data contract
 
-Each question has a deterministic ID, type, domain, chapter, subchapter, concepts, difficulty (1–5), cognitive level, exam weight, source type and reference, stem, choices or three statements, answer, mechanism based explanation, choice explanations, common trap, takeaways, exam technique, prerequisites, related concepts, estimated time, and tags. The loader in `src/data/index.js` imports question modules on demand and validates IDs. New banks can be added as modules or through a later import adapter without changing the UI.
+Each question has a deterministic ID, type, domain, chapter, subchapter, concepts, difficulty (1–5), cognitive level, exam weight, source type and reference, stem, choices or three statements, answer, mechanism based explanation, choice explanations, common trap, takeaways, exam technique, prerequisites, related concepts, estimated time, and tags. The loader in `src/data/index.js` imports question modules on demand and validates IDs. Reviewed JSON can be staged through `src/import/question-import.js`; ZIP extraction and scientific review must happen before import. New banks can be added without changing the UI.
 
 ## Learning logic
 
