@@ -23,7 +23,7 @@ export function rankPriorities(topics, now = Date.now()) {
   return topics.map(topic => {
     const weight = topic.examWeight ?? DOMAIN_WEIGHTS[topic.domain] ?? 0.1;
     const weakness = topic.mastery == null ? 0.55 : Math.max(0.12,1-clamp(topic.mastery,0,100)/100);
-    const foundation = 1 + Math.min(0.9,(topic.prerequisiteCount || 0)*0.16) + (topic.core ? 0.20 : 0);
+    const foundation = 1 + Math.min(0.9,(topic.prerequisiteCount || 0)*0.16) + (topic.core ? (topic.mastery == null ? 1.0 : 0.20) : 0);
     const errors = Math.max(0,topic.errors || 0);
     const frequency = 1 + Math.min(1,errors/5) + Math.min(0.4,(topic.consecutiveErrors || 0)*0.08);
     const days = topic.lastPracticedAt ? Math.max(0,(now-topic.lastPracticedAt)/86400000) : 30;
@@ -49,7 +49,7 @@ export function deriveTopicStats(questions, attempts, now = Date.now()) {
       concepts:new Set(), core:false });
     const row = topics.get(id);
     for (const concept of q.concepts || []) row.concepts.add(concept);
-    row.core ||= (q.tags || []).includes("core");
+    row.core ||= (q.tags || []).includes("core") || (q.concepts || []).some(c => /^(membrane|enzyme|cellular-respiration|mitosis|meiosis|dna|transcription|translation|homeostasis|mendelian-genetics)$/i.test(c)) || /เยื่อหุ้ม|เอนไซม์|หายใจระดับเซลล์|ไมโทซิส|ไมโอซิส|DNA|ถอดรหัส|แปลรหัส|พันธุศาสตร์เมนเดล|ภาวะธำรงดุล/i.test(id);
     for (const prerequisite of q.prerequisiteConcepts || []) {
       if (!dependents.has(prerequisite)) dependents.set(prerequisite,new Set());
       dependents.get(prerequisite).add(id);
