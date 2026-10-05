@@ -20,6 +20,7 @@ export function catalogView(bank,state) {
     return { id:domain.id, title:domain.titleTh, description:domain.title,
       weightRange:domain.targetQuestions[0] + "–" + domain.targetQuestions[1] + " ข้อ",
       questionCount:questions.length, mastery:calculateMastery(attempts).score,
+      availability:questions.map(q => ({subchapter:q.subchapter,difficulty:q.difficulty,type:q.type})),
       subchapters:[...new Set([...domain.subchapters,...questions.map(q => q.subchapter)])].map(name => ({
         id:name,title:name,questionCount:questions.filter(q => q.subchapter === name).length,
         mastery:calculateMastery(attempts.filter(a => a.subchapter === name)).score
