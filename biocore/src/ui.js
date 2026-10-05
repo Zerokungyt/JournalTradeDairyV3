@@ -100,6 +100,8 @@ export function mountBioCore(root, adapter) {
     const chapter = state.catalog.find(c=>c.id===state.selectedDomain);
     if (!chapter) return chapters();
     const subs = chapter.subchapters || [];
+    const available=(chapter.availability || []).filter(q => (state.selectedSubchapter==='all' || q.subchapter===state.selectedSubchapter) && q.difficulty===state.setup.difficulty && (state.setup.type==='mixed' || q.type===state.setup.type)).length;
+    const selectedCount=state.setup.count==='unlimited' ? available : Math.min(Number(state.setup.count),available);
     return layout(`
       <button class="text-link" type="button" data-action="nav" data-view="chapters">← ทุกบท</button>
       ${head('PRACTICE / CHAPTER',chapter.title || domainName(chapter.id),chapter.description || '')}
@@ -110,7 +112,7 @@ export function mountBioCore(root, adapter) {
           ${fieldSegment('จำนวนข้อ','count',[[5,'5'],[10,'10'],[20,'20'],[30,'30'],['unlimited','Unlimited']],state.setup.count)}
           ${fieldSegment('Question Type','type',[['mcq','Multiple Choice'],['complex','Complex Choice'],['mixed','Mixed']],state.setup.type)}
           ${fieldSegment('Mode','mode',[['practice','Practice Mode'],['exam','Exam Mode']],state.setup.mode)}
-          <button class="btn primary" type="button" data-action="startChapter" ${state.busy?'disabled':''}>เริ่มทำโจทย์ ${icon('arrow')}</button>
+          <p class="note">คลังโจทย์ที่ตรงเงื่อนไขมี ${fmt(available)} ข้อ · ชุดนี้จะใช้ ${fmt(selectedCount)} ข้อ</p>\n          <button class="btn primary" type="button" data-action="startChapter" ${(state.busy||available===0)?'disabled':''}>เริ่มทำโจทย์ ${icon('arrow')}</button>
         </div>
       </div><aside class="card card-pad"><span class="eyebrow">SESSION SUMMARY</span><h3 style="margin-top:15px">${esc(chapter.title || domainName(chapter.id))}</h3><div class="summary-list"><div><span>หัวข้อ</span><strong>${esc(state.selectedSubchapter==='all'?'ทุกหัวข้อ':subs.find(s=>s.id===state.selectedSubchapter)?.title || state.selectedSubchapter)}</strong></div><div><span>ระดับ</span><strong>${fmt(state.setup.difficulty)} / 5</strong></div><div><span>ข้อ</span><strong>${state.setup.count==='unlimited'?'ไม่จำกัด':fmt(state.setup.count)}</strong></div><div><span>เฉลย</span><strong>${state.setup.mode==='practice'?'หลังตอบแต่ละข้อ':'หลังส่งชุด'}</strong></div></div><p class="note" style="margin-top:18px">ข้อสอบแต่ละข้อแสดงแหล่งที่มาอย่างชัดเจน ข้อที่สร้างขึ้นใหม่ไม่แสดงเป็น Official</p></aside></div>
     `,'ฝึกแยกบท');
